@@ -152,6 +152,45 @@ def test_expiry_requeues_and_old_token_is_stale_before_recovery():
         assert second.json()["claim_token"] != first["claim_token"]
 
 
+def test_full_task_exchange_sender_sees_completed_result():
+    with TestClient(main.app) as client:
+        sender, sender_headers = register(client, "alice")
+        recipient, recipient_headers = register(client, "uppercase")
+
+        sent = client.post(
+            "/api/v1/tasks",
+            headers=sender_headers,
+            json={"to": recipient["agent_id"], "input": "hello agent relay"},
+        )
+        assert sent.status_code == 201
+        assert sent.json()["status"] == "queued"
+        task_id = sent.json()["task_id"]
+
+        claim = client.post(
+            "/api/v1/tasks/claim",
+            headers=recipient_headers,
+            json={"worker_id": "worker-a", "wait_seconds": 0},
+        )
+        assert claim.status_code == 200
+        claim_data = claim.json()
+
+        complete = client.post(
+            f"/api/v1/tasks/{task_id}/complete",
+            headers=recipient_headers,
+            json={"claim_token": claim_data["claim_token"], "output": "HELLO AGENT RELAY"},
+        )
+        assert complete.status_code == 200
+        assert complete.json()["status"] == "completed"
+
+        result = client.get(f"/api/v1/tasks/{task_id}", headers=sender_headers)
+        assert result.status_code == 200
+        body = result.json()
+        assert body["status"] == "completed"
+        assert body["output"] == "HELLO AGENT RELAY"
+        assert body["error"] is None
+        assert body["finished_at"] is not None
+
+
 def test_dashboard_is_asset_and_invalid_input_is_documented_error():
     with TestClient(main.app) as client:
         page = client.get("/")
