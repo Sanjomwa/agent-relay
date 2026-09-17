@@ -1,0 +1,9 @@
+.venv
+.git
+.pytest_cache
+__pycache__/
+*.db
+*.db-shm
+*.db-wal
+*-credentials.json
+reports.md
