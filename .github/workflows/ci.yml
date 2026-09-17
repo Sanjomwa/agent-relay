@@ -1,0 +1,84 @@
+name: CI/CD
+
+# This workflow deploys to a local kind cluster and was built and verified to
+# run via `act` against this machine's own Docker daemon and kind cluster --
+# it isn't meant to run on GitHub-hosted runners, which have no such cluster
+# to deploy into. Manual dispatch only.
+on:
+  workflow_dispatch:
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compute unique image tag
+        id: vars
+        run: |
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          TAG="${SHORT_SHA}-$(date +%s)"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "Image tag: agent-relay:$TAG"
+
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Start ephemeral PostgreSQL for tests
+        run: |
+          docker rm -f ci-postgres >/dev/null 2>&1 || true
+          docker run -d --name ci-postgres \
+            -e POSTGRES_USER=agent_relay -e POSTGRES_PASSWORD=agent_relay -e POSTGRES_DB=agent_relay_test \
+            -p 5433:5432 postgres:16-alpine
+          echo "Waiting for Postgres to accept connections..."
+          for i in $(seq 1 30); do
+            if docker exec ci-postgres pg_isready -U agent_relay -d agent_relay_test >/dev/null 2>&1; then
+              echo "Postgres ready after ${i}s"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Postgres did not become ready in time" >&2
+          exit 1
+
+      - name: Install project dependencies
+        run: uv sync
+
+      - name: Run test suite (incl. Question 2 integration test) against real PostgreSQL
+        env:
+          RELAY_DATABASE_URL: postgresql+psycopg://agent_relay:agent_relay@localhost:5433/agent_relay_test
+        run: |
+          # test_sqlite_atomic_claims_distribute_without_overlap is deliberately
+          # excluded here: it asserts a concurrency guarantee that comes from
+          # SQLite's BEGIN IMMEDIATE whole-database writer lock specifically.
+          # PostgreSQL has no equivalent without adding SELECT ... FOR UPDATE
+          # SKIP LOCKED to the claim query -- the seam SPEC.md and database.py
+          # call out as a future hardening exercise, not something this
+          # homework asks for. Every other test, including the Question 2
+          # integration test, runs and must pass against real Postgres.
+          uv run pytest -q -k "not test_sqlite_atomic_claims_distribute_without_overlap"
+
+      - name: Stop ephemeral PostgreSQL
+        if: always()
+        run: docker rm -f ci-postgres >/dev/null 2>&1 || true
+
+      - name: Build Docker image
+        run: docker build -t "agent-relay:${{ steps.vars.outputs.tag }}" .
+
+      - name: Install kubectl and kind
+        run: |
+          curl -sSLo /usr/local/bin/kubectl "https://dl.k8s.io/release/$(curl -sSL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x /usr/local/bin/kubectl
+          curl -sSLo /usr/local/bin/kind https://kind.sigs.k8s.io/dl/v0.30.0/kind-linux-amd64
+          chmod +x /usr/local/bin/kind
+
+      - name: Load image into kind cluster
+        run: kind load docker-image "agent-relay:${{ steps.vars.outputs.tag }}" --name agent-relay
+
+      - name: Deploy new image and wait for rollout
+        run: |
+          kubectl set image deployment/agent-relay-app app="agent-relay:${{ steps.vars.outputs.tag }}"
+          kubectl rollout status deployment/agent-relay-app --timeout=120s
