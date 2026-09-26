@@ -1,0 +1,39 @@
+{
+  "incident_id": "INC-20260926-185738-fix-forward-verify",
+  "expected_version": "20260926-185716-0a7a1fb",
+  "started_at": "2026-09-26T19:00:36Z",
+  "finished_at": "2026-09-26T19:01:40Z",
+  "passed": true,
+  "checks": [
+    {
+      "name": "ready",
+      "passed": true,
+      "detail": "GET /ready -> 200",
+      "at": "2026-09-26T19:00:36Z"
+    },
+    {
+      "name": "version",
+      "passed": true,
+      "detail": "/version = 20260926-185716-0a7a1fb",
+      "at": "2026-09-26T19:00:37Z"
+    },
+    {
+      "name": "traffic_probe",
+      "passed": true,
+      "detail": "[final    62s] sent=121 claimed=121 completed=121 errors=0 stale=0",
+      "at": "2026-09-26T19:01:40Z"
+    },
+    {
+      "name": "error_ratio_zero",
+      "passed": true,
+      "detail": "5xx rate on claim/complete routes = 0",
+      "at": "2026-09-26T19:01:40Z"
+    },
+    {
+      "name": "alert_resolved",
+      "passed": true,
+      "detail": "RelayClaimCompleteErrorRatioHigh is not firing or pending",
+      "at": "2026-09-26T19:01:40Z"
+    }
+  ]
+}
