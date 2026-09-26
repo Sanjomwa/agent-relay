@@ -12,6 +12,7 @@ import contextlib
 import hmac
 import logging
 import os
+import random
 import time
 from contextlib import asynccontextmanager
 from typing import Any, Literal
@@ -318,6 +319,17 @@ def metered_terminal(task_id: str, agent_id: str, claim_token: str, action: Lite
         instruments.tasks_terminal.add(1, {"action": action, "outcome": outcome})
 
 
+def complete_fault_rate() -> float:
+    """RELAY_FAULT_COMPLETE_5XX_RATE: fraction (0-1) of complete requests to fail on
+    purpose, for incident drills. Read per request; 0 or unset/invalid means off."""
+
+    try:
+        rate = float(os.getenv("RELAY_FAULT_COMPLETE_5XX_RATE", "0"))
+    except ValueError:
+        return 0.0
+    return min(max(rate, 0.0), 1.0)
+
+
 @app.post("/api/v1/tasks/{task_id}/heartbeat")
 async def task_heartbeat(
     body: ClaimTokenRequest,
@@ -333,6 +345,11 @@ async def task_complete(
     task_id: str = FastAPIPath(..., min_length=1, max_length=100),
     current=Depends(current_agent),
 ) -> dict[str, str]:
+    rate = complete_fault_rate()
+    if rate > 0 and random.random() < rate:
+        LOGGER.warning("injected drill fault: failing complete request (RELAY_FAULT_COMPLETE_5XX_RATE=%s)", rate)
+        instruments.tasks_terminal.add(1, {"action": "complete", "outcome": "error"})
+        raise RelayError("injected_fault", "Injected drill fault.", 500)
     return metered_terminal(task_id, current.id, body.claim_token, "complete", body.output)
 
 
