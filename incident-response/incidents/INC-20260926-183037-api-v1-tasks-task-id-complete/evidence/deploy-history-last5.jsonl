@@ -1,0 +1,5 @@
+{"version":"20260926-093307-64dddaf-dirty","git_sha":"64dddaf","image_id":"sha256:d44958e9ebb22eb288879c715bac156688265fb7a27374009306e862f90fdeb5","timestamp":"2026-09-26T09:33:26Z","previous_version":"20260926-093128-64dddaf-dirty"}
+{"version":"20260926-093326-64dddaf-dirty","git_sha":"64dddaf","image_id":"sha256:bf62bb9bc83f4c4fd129b3e48697afaec341582c5dbd557b51acb5825ed07eb4","timestamp":"2026-09-26T09:33:43Z","previous_version":"20260926-093307-64dddaf-dirty"}
+{"version":"20260926-100835-0a305bc","git_sha":"0a305bc","image_id":"sha256:fc28d97cf76bb9bcbf1ed5c3515739adb7bedee3d708d24cd1ab783127e44bea","timestamp":"2026-09-26T10:08:53Z","previous_version":"20260926-093326-64dddaf-dirty"}
+{"version":"20260926-181002-829513a","git_sha":"829513a","image_id":"sha256:6baacddcea34f37c32ebf4b0eae45b13876114908f8f00ce0eab736a4c84bda6","timestamp":"2026-09-26T18:10:24Z","previous_version":"20260926-100835-0a305bc"}
+{"version":"20260926-182749-105fb53","git_sha":"105fb53","image_id":"sha256:7e2e61d3874a589ede80c4a94ebebb2e9e4016d6ba8453c4fd8c050d512b9ee9","timestamp":"2026-09-26T18:28:19Z","previous_version":"20260926-181002-829513a"}

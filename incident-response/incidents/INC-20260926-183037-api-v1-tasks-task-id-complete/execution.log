@@ -1,0 +1,15 @@
+$ /home/sanjomwa/Projects/agent-relay/incident-response/runbooks/rollback.sh 20260926-181002-829513a
+(exit 0)
+
+--- stdout
+rollback: 20260926-182749-105fb53 -> 20260926-181002-829513a (no build) [incident INC-20260926-183037-api-v1-tasks-task-id-complete]
+rollback: done; /version=20260926-181002-829513a /ready=200; history appended
+
+--- stderr
+ Container agent-relay-postgres-1 Running 
+ Container agent-relay-app-1 Recreate 
+ Container agent-relay-app-1 Recreated 
+ Container agent-relay-postgres-1 Waiting 
+ Container agent-relay-postgres-1 Healthy 
+ Container agent-relay-app-1 Starting 
+ Container agent-relay-app-1 Started 

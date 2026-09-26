@@ -1,0 +1,51 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: agent_relay
+      POSTGRES_PASSWORD: agent_relay
+      POSTGRES_DB: agent_relay
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agent_relay -d agent_relay"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    # Every release gets its own retained tag (scripts/release.sh); rolling back
+    # is `APP_VERSION=<previous> docker compose up -d app`, with no rebuild.
+    image: agent-relay:${APP_VERSION:-dev}
+    build:
+      context: .
+      args:
+        APP_VERSION: ${APP_VERSION:-dev}
+        GIT_SHA: ${GIT_SHA:-unknown}
+    ports:
+      - "8010:8000"
+    environment:
+      RELAY_DATABASE_URL: postgresql+psycopg://[REDACTED]@postgres:5432/agent_relay
+      DEPLOYMENT_ENVIRONMENT: local
+      # Incident drill (HW4 Step 5): fail 35% of complete requests on purpose.
+      RELAY_FAULT_COMPLETE_5XX_RATE: "0.35"
+      # Telemetry goes to the observability stack's collector (observability/compose.yaml).
+      # If that stack is down the app keeps serving; exports just fail quietly-ish.
+      OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-http://otel-collector:4318}
+    healthcheck:
+      # The slim image has no curl; urlopen raises on non-2xx, so a 503 fails.
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/ready', timeout=3)"
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

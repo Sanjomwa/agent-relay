@@ -1,0 +1,66 @@
+{
+  "incident_id": "INC-20260926-183037-api-v1-tasks-task-id-complete",
+  "at": "2026-09-26T18:44:14Z",
+  "approved_by": "sanjomwa",
+  "facts": {
+    "observed_at": "2026-09-26T18:44:13Z",
+    "alert_firing": true,
+    "running_version": "20260926-182749-105fb53",
+    "previous_version": "20260926-181002-829513a",
+    "running_deployed_at": "2026-09-26T18:28:19Z",
+    "rollbacks_in_history": [],
+    "executed_actions_in_incident": 0
+  },
+  "decision": {
+    "decision": "require_approval",
+    "disposition": "await_approval",
+    "action_type": "rollback",
+    "level": "L1",
+    "reasons": [
+      "level L1: every precondition holds, but a human must approve (respond.py approve <ID>)"
+    ],
+    "confidence_gate": {
+      "value": 0.9,
+      "escalate_below": 0.5,
+      "downgraded": false
+    },
+    "preconditions": [
+      {
+        "name": "alert_still_firing",
+        "ok": true,
+        "detail": "alert is still firing (observed in Prometheus)"
+      },
+      {
+        "name": "target_is_previous_version",
+        "ok": true,
+        "detail": "target_version equals previous_version 20260926-181002-829513a"
+      },
+      {
+        "name": "target_image_exists_locally",
+        "ok": true,
+        "detail": "image agent-relay:20260926-181002-829513a exists locally"
+      },
+      {
+        "name": "current_deployed_within_max_age",
+        "ok": true,
+        "detail": "running version was deployed 0:15:54.685352 ago (<= 24h)"
+      },
+      {
+        "name": "no_recent_rollback",
+        "ok": true,
+        "detail": "no rollback executed in the last 30 minutes"
+      },
+      {
+        "name": "under_action_limit",
+        "ok": true,
+        "detail": "0 of 1 allowed actions executed in this incident"
+      }
+    ],
+    "execution": {
+      "runbook": "rollback.sh",
+      "args": [
+        "20260926-181002-829513a"
+      ]
+    }
+  }
+}

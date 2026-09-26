@@ -1,0 +1,12 @@
+### docker compose ps -a (app project)
+NAME                     IMAGE                                 COMMAND                  SERVICE    CREATED         STATUS                    PORTS
+agent-relay-app-1        agent-relay:20260926-182749-105fb53   "uvicorn main:app --…"   app        2 minutes ago   Up 2 minutes (healthy)    0.0.0.0:8010->8000/tcp, [::]:8010->8000/tcp
+agent-relay-postgres-1   postgres:16-alpine                    "docker-entrypoint.s…"   postgres   10 hours ago    Up 21 minutes (healthy)   5432/tcp
+
+### docker compose -f observability/compose.yaml ps -a (observability project)
+NAME                                         IMAGE                                          COMMAND                  SERVICE          CREATED       STATUS          PORTS
+agent-relay-observability-grafana-1          grafana/grafana:12.3.11                        "/run.sh"                grafana          8 hours ago   Up 21 minutes   127.0.0.1:3000->3000/tcp
+agent-relay-observability-loki-1             grafana/loki:3.6.17                            "/usr/bin/loki -conf…"   loki             8 hours ago   Up 21 minutes   127.0.0.1:3100->3100/tcp
+agent-relay-observability-otel-collector-1   otel/opentelemetry-collector-contrib:0.149.0   "/otelcol-contrib --…"   otel-collector   8 hours ago   Up 21 minutes   4317-4318/tcp, 55679/tcp
+agent-relay-observability-prometheus-1       prom/prometheus:v3.5.5                         "/bin/prometheus --c…"   prometheus       8 hours ago   Up 21 minutes   127.0.0.1:9090->9090/tcp
+agent-relay-observability-tempo-1            grafana/tempo:2.10.8                           "/tempo -config.file…"   tempo            8 hours ago   Up 21 minutes   127.0.0.1:3200->3200/tcp

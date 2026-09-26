@@ -1,0 +1,10 @@
+105fb53 Add fault-injection switch on the complete path and enable it at 35% for the HW4 incident drill
+829513a Add incident-response: read-only responder with code-enforced autonomy policy, per-route alert, runbooks, and a recorded drill
+5d7fbed Add observability stack (collector, Prometheus, Loki, Tempo, Grafana), dashboard, claim/complete 5xx alert, and traffic generator
+0a305bc Add app version, JSON logging, OpenTelemetry traces/metrics/logs, business metrics, and versioned release/rollback script
+64dddaf Use FOR UPDATE SKIP LOCKED in claim_one so concurrent claims are exclusive on Postgres
+ce26b42 Bump dashboard heading to v2
+022fcbe Add CI/CD workflow: test-gated deploy to kind via act (Q6)
+a20c14a Add Kubernetes manifests for local kind deployment (Q5)
+1f2a30b Add PostgreSQL support and Docker Compose orchestration (Q4)
+119e9b7 Containerize with Docker (Q3)

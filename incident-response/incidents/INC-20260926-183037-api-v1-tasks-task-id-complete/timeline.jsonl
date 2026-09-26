@@ -1,0 +1,14 @@
+{"ts": "2026-09-26T18:30:37.237Z", "event": "alert_received", "incident_id": "INC-20260926-183037-api-v1-tasks-task-id-complete", "alertname": "RelayClaimCompleteErrorRatioHigh", "route": "/api/v1/tasks/{task_id}/complete", "version": "20260926-182749-105fb53", "active_at": "2026-09-26T18:29:19.038480383Z"}
+{"ts": "2026-09-26T18:30:37.237Z", "event": "evidence_collection_started"}
+{"ts": "2026-09-26T18:30:42.709Z", "event": "evidence_collection_finished", "exit_code": 0, "secret_scan": "passed"}
+{"ts": "2026-09-26T18:30:42.909Z", "event": "responder_started", "attempt": 1, "model": "sonnet", "budget_usd": "1.00"}
+{"ts": "2026-09-26T18:31:27.789Z", "event": "responder_finished", "attempt": 1, "exit_code": 0, "duration_s": 44.8, "cost_usd": 0.18924180000000002}
+{"ts": "2026-09-26T18:31:28.361Z", "event": "schema_validation", "attempt": 1, "valid": true, "errors": []}
+{"ts": "2026-09-26T18:31:28.924Z", "event": "policy_decision", "decision": "require_approval", "disposition": "await_approval", "action": "rollback", "reasons": ["level L1: every precondition holds, but a human must approve (respond.py approve <ID>)"]}
+{"ts": "2026-09-26T18:31:28.925Z", "event": "awaiting_human_approval", "command": {"runbook": "rollback.sh", "args": ["20260926-181002-829513a"]}}
+{"ts": "2026-09-26T18:44:13.647Z", "event": "approval_given", "approved_by": "sanjomwa"}
+{"ts": "2026-09-26T18:44:14.300Z", "event": "approval_recheck", "disposition": "await_approval", "reasons": ["level L1: every precondition holds, but a human must approve (respond.py approve <ID>)"]}
+{"ts": "2026-09-26T18:44:14.300Z", "event": "execution_started", "command": "/home/sanjomwa/Projects/agent-relay/incident-response/runbooks/rollback.sh 20260926-181002-829513a", "approved_by": "sanjomwa"}
+{"ts": "2026-09-26T18:44:21.834Z", "event": "execution_finished", "exit_code": 0}
+{"ts": "2026-09-26T18:44:21.834Z", "event": "verification_started", "expected_version": "20260926-181002-829513a"}
+{"ts": "2026-09-26T18:45:25.121Z", "event": "verification_finished", "passed": true}

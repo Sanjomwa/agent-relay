@@ -1,0 +1,1 @@
+{"status":"success","data":{"resultType":"matrix","result":[{"metric":{"http_route":"/api/v1/tasks/{task_id}/complete"},"values":[[1790447359,"0.29411764705882354"],[1790447389,"0.305"],[1790447419,"0.34215032038362553"]]}]}}

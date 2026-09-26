@@ -1,0 +1,6 @@
+verify: ready -> PASS: GET /ready -> 200
+verify: version -> PASS: /version = 20260926-181002-829513a
+verify: traffic_probe -> PASS: [final    62s] sent=121 claimed=121 completed=121 errors=0 stale=0
+verify: error_ratio_zero -> PASS: 5xx rate on claim/complete routes = 0
+verify: alert_resolved -> PASS: RelayClaimCompleteErrorRatioHigh is not firing or pending
+verify: overall PASS -> incident-response/incidents/INC-20260926-183037-api-v1-tasks-task-id-complete/verification.json
