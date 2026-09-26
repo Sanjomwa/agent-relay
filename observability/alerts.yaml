@@ -8,10 +8,10 @@ groups:
     interval: 15s
     rules:
       - alert: RelayClaimCompleteErrorRatioHigh
-        # Ratio of 5xx responses on the claim + complete routes, per
-        # service/environment/version, with a minimum-volume guard so a single error
-        # at near-zero traffic cannot fire it: at least 20 claim/complete requests in
-        # the last 2 minutes (about 0.17 req/s).
+        # Evaluated PER ROUTE (claim and complete separately), so a failing route
+        # cannot be diluted by a healthy one (e.g. complete failing while claim is
+        # fine). Each route is checked on its own: 5xx ratio > 10% over 1 minute AND
+        # at least 20 requests on THAT route in the last 2 minutes.
         #
         # The guard is an absolute request COUNT, not a rate floor, on purpose. A real
         # outage starves its own traffic: when Postgres was stopped, throughput on
@@ -21,14 +21,14 @@ groups:
         # why this floor sits well below what an outage produces.
         expr: |
           (
-            sum by (service_name, deployment_environment_name, service_version) (
+            sum by (service_name, deployment_environment_name, service_version, http_route) (
               rate(http_server_request_duration_seconds_count{
                 http_route=~"/api/v1/tasks/claim|/api/v1/tasks/\\{task_id\\}/complete",
                 http_response_status_code=~"5.."
               }[1m])
             )
             /
-            sum by (service_name, deployment_environment_name, service_version) (
+            sum by (service_name, deployment_environment_name, service_version, http_route) (
               rate(http_server_request_duration_seconds_count{
                 http_route=~"/api/v1/tasks/claim|/api/v1/tasks/\\{task_id\\}/complete"
               }[1m])
@@ -37,7 +37,7 @@ groups:
           )
           and
           (
-            sum by (service_name, deployment_environment_name, service_version) (
+            sum by (service_name, deployment_environment_name, service_version, http_route) (
               increase(http_server_request_duration_seconds_count{
                 http_route=~"/api/v1/tasks/claim|/api/v1/tasks/\\{task_id\\}/complete"
               }[2m])
@@ -50,12 +50,13 @@ groups:
           service: "{{ $labels.service_name }}"
           environment: "{{ $labels.deployment_environment_name }}"
           version: "{{ $labels.service_version }}"
+          route: "{{ $labels.http_route }}"
           owner: relay-oncall
         annotations:
-          summary: "Agents cannot claim/complete tasks on {{ $labels.service_name }} ({{ $labels.deployment_environment_name }}, {{ $labels.service_version }})"
+          summary: "5xx errors on {{ $labels.http_route }} ({{ $labels.service_name }}, {{ $labels.deployment_environment_name }}, {{ $labels.service_version }})"
           description: >-
-            {{ $value | humanizePercentage }} of claim and complete requests are failing with 5xx
-            (threshold 10% over the last minute, with at least 20 requests in the last 2 minutes).
-            Tasks are not being delivered or finished; senders' work is stuck in the queue.
+            {{ $value | humanizePercentage }} of requests to {{ $labels.http_route }} are failing with 5xx
+            (threshold 10% over the last minute, with at least 20 requests to this route in the last 2 minutes).
+            Agents cannot use this part of the relay; work is stuck or not being delivered.
           dashboard_url: "http://localhost:3000/d/agent-relay-overview/agent-relay-overview?orgId=1&var-environment={{ $labels.deployment_environment_name }}&var-version={{ $labels.service_version }}"
           runbook: "incident-response/runbooks/claim-complete-5xx.md"

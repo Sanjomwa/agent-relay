@@ -1,0 +1,314 @@
+2026-09-26T11:33:52Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:52Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:52Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:52Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:52Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:47Z ERROR agent_relay v=20260926-100835-0a305bc trace=- lease recovery pass failed exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:47Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:46Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:46Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:45Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:45Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:42Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:41Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:41Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:41Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:41Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:37Z ERROR agent_relay v=20260926-100835-0a305bc trace=- lease recovery pass failed exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:37Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:37Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:37Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:37Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:37Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:32Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:32Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:32Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:31Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:31Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:28Z ERROR agent_relay v=20260926-100835-0a305bc trace=- lease recovery pass failed exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:28Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:28Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:28Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:28Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:28Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:24Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:24Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:24Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:24Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:24Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:19Z ERROR agent_relay v=20260926-100835-0a305bc trace=- lease recovery pass failed exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:19Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:19Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:18Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:18Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:18Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:15Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:15Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:14Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:14Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:14Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:10Z ERROR agent_relay v=20260926-100835-0a305bc trace=- lease recovery pass failed exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:10Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:10Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:10Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:10Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:10Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:05Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:05Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:04Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:04Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:04Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:01Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:01Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:00Z ERROR agent_relay v=20260926-100835-0a305bc trace=- lease recovery pass failed exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:00Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:00Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:33:00Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:56Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:56Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:56Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:56Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:56Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:52Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:52Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:51Z ERROR agent_relay v=20260926-100835-0a305bc trace=- lease recovery pass failed exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:50Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:50Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:50Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:47Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:47Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:47Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:47Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:47Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:42Z ERROR agent_relay v=20260926-100835-0a305bc trace=- lease recovery pass failed exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:42Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:42Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:42Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:42Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:42Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:37Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:37Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:36Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:36Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:36Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:33Z ERROR agent_relay v=20260926-100835-0a305bc trace=- lease recovery pass failed exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:33Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:33Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:33Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:32Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:32Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:29Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:29Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:29Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:29Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:29Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:24Z ERROR agent_relay v=20260926-100835-0a305bc trace=- lease recovery pass failed exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:24Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:24Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:23Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:23Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:23Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:20Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:20Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:19Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:19Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:19Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:15Z ERROR agent_relay v=20260926-100835-0a305bc trace=- lease recovery pass failed exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:15Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:15Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:15Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:15Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:15Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:10Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:10Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:09Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:09Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:09Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:05Z ERROR agent_relay v=20260926-100835-0a305bc trace=- lease recovery pass failed exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:05Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:05Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:05Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:05Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:05Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:01Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:01Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:01Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:01Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:32:01Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:31:57Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:31:56Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:31:56Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:31:56Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:31:56Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:31:53Z ERROR agent_relay v=20260926-100835-0a305bc trace=- lease recovery pass failed exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:31:52Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:31:52Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:31:52Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:31:52Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:31:52Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:31:48Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:31:48Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:31:48Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:31:48Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:31:48Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:31:44Z ERROR agent_relay v=20260926-100835-0a305bc trace=- lease recovery pass failed exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:31:41Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:31:41Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:31:41Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:31:41Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:31:41Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) failed to resolve host 'postgres': [Errno -2] Name or service not known
+2026-09-26T11:31:37Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) connection failed: connection to server at "172.18.0.2", port 5432 failed: FATAL:  the database system is shutting down
+2026-09-26T11:31:36Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.errors.AdminShutdown) terminating connection due to administrator command
+2026-09-26T11:31:36Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.errors.AdminShutdown) terminating connection due to administrator command
+2026-09-26T11:31:36Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) connection failed: connection to server at "172.18.0.2", port 5432 failed: FATAL:  the database system is shutting down
+2026-09-26T11:31:36Z ERROR uvicorn.error v=20260926-100835-0a305bc trace=- Exception in ASGI application
+ exception=OperationalError: (psycopg.OperationalError) connection failed: connection to server at "172.18.0.2", port 5432 failed: FATAL:  the database system is shutting down

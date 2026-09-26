@@ -1,0 +1,12 @@
+{"ts": "2026-09-26T11:31:37.000Z", "event": "drill_fault_injected", "source": "operator", "detail": "docker compose stop postgres (before the incident existed; recorded after the fact from the drill script log)"}
+{"ts": "2026-09-26T11:33:53.037Z", "event": "alert_received", "incident_id": "INC-20260926-113352-api-v1-tasks-claim", "alertname": "RelayClaimCompleteErrorRatioHigh", "route": "/api/v1/tasks/claim", "version": "20260926-100835-0a305bc", "active_at": "2026-09-26T11:32:34.038480383Z"}
+{"ts": "2026-09-26T11:33:53.038Z", "event": "evidence_collection_started"}
+{"ts": "2026-09-26T11:34:01.666Z", "event": "evidence_collection_finished", "exit_code": 0, "secret_scan": "passed"}
+{"ts": "2026-09-26T11:34:01.694Z", "event": "responder_started", "attempt": 1, "model": "sonnet", "budget_usd": "1.00"}
+{"ts": "2026-09-26T11:34:32.091Z", "event": "responder_finished", "attempt": 1, "exit_code": 0, "duration_s": 29.6, "cost_usd": 0.142673}
+{"ts": "2026-09-26T11:34:32.520Z", "event": "schema_validation", "attempt": 1, "valid": true, "errors": []}
+{"ts": "2026-09-26T11:34:33.402Z", "event": "policy_decision", "decision": "escalate", "disposition": "escalate", "action": "escalate", "reasons": ["escalate is always allowed; an escalation packet is produced for a human"]}
+{"ts": "2026-09-26T11:34:33.403Z", "event": "escalated", "reason": "escalate is always allowed; an escalation packet is produced for a human"}
+{"ts": "2026-09-26T11:34:58.000Z", "event": "drill_fault_removed", "source": "operator", "detail": "docker compose start postgres (after the pipeline finished, as instructed)", "recorded_after_the_fact": true}
+{"ts": "2026-09-26T11:35:00.000Z", "event": "verification_started", "source": "operator", "expected_version": "20260926-100835-0a305bc", "command": "incident-response/runbooks/verify-recovery.sh", "recorded_after_the_fact": true}
+{"ts": "2026-09-26T11:36:06.000Z", "event": "verification_finished", "source": "operator", "passed": true, "checks": {"ready": true, "version": true, "traffic_probe": true, "error_ratio_zero": true, "alert_resolved": true}, "recorded_after_the_fact": true}

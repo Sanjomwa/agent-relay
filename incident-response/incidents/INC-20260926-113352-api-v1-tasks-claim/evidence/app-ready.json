@@ -1,0 +1,4 @@
+{
+  "http_status": 503,
+  "body": "{\"status\":\"not_ready\"}"
+}

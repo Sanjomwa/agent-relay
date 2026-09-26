@@ -1,0 +1,15 @@
+ .dockerignore         |   2 +
+ .gitignore            |   1 +
+ Dockerfile            |  17 ++-
+ buildinfo.py          |  36 ++++++
+ compose.yaml          |  21 +++-
+ database.py           |   8 +-
+ logging_config.py     |  91 ++++++++++++++
+ main.py               | 151 +++++++++++++++++------
+ pyproject.toml        |   5 +
+ scripts/release.sh    |  72 +++++++++++
+ telemetry.py          | 270 +++++++++++++++++++++++++++++++++++++++++
+ test_observability.py | 299 ++++++++++++++++++++++++++++++++++++++++++++++
+ uv.lock               | 324 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ worker.py             |   2 +-
+ 14 files changed, 1259 insertions(+), 40 deletions(-)

@@ -1,0 +1,120 @@
+{
+  "title": "Incident responder output",
+  "description": "The only shape the read-only responder may return. Everything here is a proposal; incident-response/policy.py decides what (if anything) is allowed to happen. (No $schema keyword on purpose: the Claude CLI's --json-schema validator cannot resolve the 2020-12 meta-schema URL; incident-response/policy.py validates with Draft 2020-12 explicitly.)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "incident_id",
+    "summary",
+    "root_cause_hypothesis",
+    "evidence_refs",
+    "suspected_change",
+    "confidence",
+    "proposed_action",
+    "risks",
+    "verification_plan"
+  ],
+  "properties": {
+    "incident_id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 80
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "root_cause_hypothesis": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 3000
+    },
+    "evidence_refs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 30,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "file",
+          "finding"
+        ],
+        "properties": {
+          "file": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "finding": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          }
+        }
+      }
+    },
+    "suspected_change": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "A git commit sha (7-40 hex chars) that appears in the evidence, or null when no change is suspected.",
+      "pattern": "^[0-9a-f]{7,40}$"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "proposed_action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "target_version",
+        "rationale"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "rollback",
+            "restart_app",
+            "escalate",
+            "no_action"
+          ]
+        },
+        "target_version": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Only for rollback: a version that appears in the deploy-history evidence. null otherwise.",
+          "pattern": "^[0-9]{8}-[0-9]{6}-[0-9a-f]{7}(-dirty)?$"
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        }
+      }
+    },
+    "risks": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 20,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      }
+    },
+    "verification_plan": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    }
+  }
+}

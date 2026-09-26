@@ -1,0 +1,61 @@
+# Autonomy policy for the incident responder.
+#
+# Principle: the model may reason; the system must observe, authorize, verify and
+# remember. The model's output is a PROPOSAL. Nothing in this file, and nothing in
+# incident-response/policy.py, is influenced by how confident the model sounds.
+# Authorization is decided by code from facts the code observed itself (Prometheus,
+# the running /version, deploy/history.jsonl, local images), never from the model's text.
+version: 1
+
+levels:
+  L0: record only; nothing is executed (escalation packets and notes)
+  L1: may execute ONLY after explicit human approval (`respond.py approve <ID>`),
+      and every precondition is re-checked at approval time
+  L2: may execute automatically when EVERY precondition holds
+      (no action is L2 today; the mechanism exists and is tested)
+
+# Confidence can only DOWNGRADE, never upgrade.
+#  * confidence below `escalate_below` forces the outcome to `escalate`, whatever action
+#    was proposed;
+#  * confidence at or above it changes NOTHING: it never raises a level, never skips a
+#    precondition, never turns a denial into an approval (0.99 and 0.51 are treated alike).
+confidence:
+  escalate_below: 0.5
+
+limits:
+  max_executed_actions_per_incident: 1
+
+# Anything not listed here (including any free-form command or unknown action type) is
+# DENIED and turned into an escalation. The only things the engine can ever execute are
+# the runbook scripts named below, with arguments validated by code (regex + equality
+# with facts). The model's text (rationale, summary, ...) is never executed.
+actions:
+  escalate:
+    level: L0
+    always_allowed: true       # produces an escalation packet for a human
+  no_action:
+    level: L0
+    always_allowed: true       # recorded, nothing executed
+  rollback:
+    level: L1
+    runbook: rollback.sh
+    args: [target_version]
+    preconditions:
+      - alert_still_firing
+      - target_is_previous_version   # target_version == previous_version in deploy/history.jsonl
+      - target_image_exists_locally
+      - current_deployed_within_max_age
+      - no_recent_rollback
+      - under_action_limit
+    params:
+      current_version_max_age_hours: 24
+      rollback_cooldown_minutes: 30
+  restart_app:
+    level: L1
+    runbook: restart-app.sh
+    args: []
+    # No deploy preconditions. The alert must still be firing (restarting for a
+    # resolved alert is pointless) and the per-incident action limit applies.
+    preconditions:
+      - alert_still_firing
+      - under_action_limit

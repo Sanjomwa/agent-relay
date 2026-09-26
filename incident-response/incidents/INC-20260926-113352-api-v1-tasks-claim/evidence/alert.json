@@ -1,0 +1,24 @@
+{
+  "labels": {
+    "alertname": "RelayClaimCompleteErrorRatioHigh",
+    "deployment_environment_name": "local",
+    "environment": "local",
+    "http_route": "/api/v1/tasks/claim",
+    "owner": "relay-oncall",
+    "route": "/api/v1/tasks/claim",
+    "service": "agent-relay",
+    "service_name": "agent-relay",
+    "service_version": "20260926-100835-0a305bc",
+    "severity": "critical",
+    "version": "20260926-100835-0a305bc"
+  },
+  "annotations": {
+    "dashboard_url": "http://localhost:3000/d/agent-relay-overview/agent-relay-overview?orgId=1&var-environment=local&var-version=20260926-100835-0a305bc",
+    "description": "100% of requests to /api/v1/tasks/claim are failing with 5xx (threshold 10% over the last minute, with at least 20 requests to this route in the last 2 minutes). Agents cannot use this part of the relay; work is stuck or not being delivered.",
+    "runbook": "incident-response/runbooks/claim-complete-5xx.md",
+    "summary": "5xx errors on /api/v1/tasks/claim (agent-relay, local, 20260926-100835-0a305bc)"
+  },
+  "state": "firing",
+  "activeAt": "2026-09-26T11:32:34.038480383Z",
+  "value": "1e+00"
+}

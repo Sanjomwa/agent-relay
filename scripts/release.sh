@@ -18,7 +18,10 @@ mkdir -p deploy
 
 previous_version=""
 if [ -s "$HISTORY" ]; then
-  previous_version="$(tail -n 1 "$HISTORY" | jq -r '.version')"
+  # The last entry is either a release ({version, ...}) or a rollback written by
+  # incident-response/runbooks/rollback.sh ({action:"rollback", to, ...}); either way
+  # the version now running is .to for a rollback and .version for a release.
+  previous_version="$(tail -n 1 "$HISTORY" | jq -r 'if .action == "rollback" then .to else .version end')"
 fi
 
 compute_version() {

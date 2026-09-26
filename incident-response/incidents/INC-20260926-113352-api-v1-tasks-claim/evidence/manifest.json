@@ -1,0 +1,283 @@
+{
+  "incident_id": "INC-20260926-113352-api-v1-tasks-claim",
+  "generated_at": "2026-09-26T11:34:01Z",
+  "alert_active_at": "2026-09-26T11:32:34.038480383Z",
+  "windows": {
+    "logs_and_traces": {
+      "from": "2026-09-26T11:17:34Z",
+      "to": "2026-09-26T11:33:53Z"
+    },
+    "metrics": {
+      "from": "2026-09-26T10:32:34Z",
+      "to": "2026-09-26T11:33:53Z"
+    }
+  },
+  "read_only": true,
+  "secret_scan": "passed (agt_/clm_ tokens, bearer credentials, database URLs with credentials, Grafana admin password)",
+  "entries": [
+    {
+      "file": "alert.json",
+      "kind": "file_copy",
+      "query": "copy of the alert JSON given to this script",
+      "timestamp": "2026-09-26T11:33:53Z",
+      "bytes": 1134,
+      "sha256": "9e3f89f1a3907a05ef143d787e79c1d1019712d5c394928d0b3b8c4d161c68b7"
+    },
+    {
+      "file": "app-version.json",
+      "kind": "http_get",
+      "query": "GET http://localhost:8010/version",
+      "timestamp": "2026-09-26T11:33:53Z",
+      "bytes": 103,
+      "sha256": "e790cc6de79e47c58d91e05187964349265febaa5fd989aa75bda721ed6ba406"
+    },
+    {
+      "file": "app-ready.json",
+      "kind": "http_get",
+      "query": "GET http://localhost:8010/ready (http status + body)",
+      "timestamp": "2026-09-26T11:33:56Z",
+      "bytes": 65,
+      "sha256": "b5d54e562b02281631e25a8c946c401d681826ac7f350085ad1406d1e7e889c2"
+    },
+    {
+      "file": "app-health.json",
+      "kind": "http_get",
+      "query": "GET http://localhost:8010/health (http status + body)",
+      "timestamp": "2026-09-26T11:33:57Z",
+      "bytes": 58,
+      "sha256": "03fa4bb0a801def882b8be33df4dcb7944b422db50a1bb886cf616b99561dbba"
+    },
+    {
+      "file": "prometheus-alerts-now.json",
+      "kind": "http_get",
+      "query": "GET http://localhost:9090/api/v1/alerts",
+      "timestamp": "2026-09-26T11:33:57Z",
+      "bytes": 1057,
+      "sha256": "c8ba8dc7d569b1b236b0019103d458ca2a5388baf0eefa510c98ae4c5740c290"
+    },
+    {
+      "file": "docker-compose-ps.txt",
+      "kind": "command",
+      "query": "docker compose ps -a; docker compose -f observability/compose.yaml ps -a",
+      "timestamp": "2026-09-26T11:33:59Z",
+      "bytes": 1801,
+      "sha256": "2a786639f57070c50730288ff138f74c40b885f35fef1d4011cbff1d35376f39"
+    },
+    {
+      "file": "deploy-history-last5.jsonl",
+      "kind": "file_read",
+      "query": "tail -n 5 deploy/history.jsonl (release records have timestamp/version/git_sha/previous_version; rollbacks have action/from/to)",
+      "timestamp": "2026-09-26T11:33:59Z",
+      "bytes": 1142,
+      "sha256": "308ecf0184482133b2a17415601007689edda18c9e513524002d696ad659ff2e"
+    },
+    {
+      "file": "metrics-request-rate-by-route.json",
+      "kind": "http_get",
+      "query": "GET http://localhost:9090/api/v1/query_range query=[sum by (http_route) (rate(http_server_request_duration_seconds_count[1m]))] start=1790418754 end=1790422433 step=30",
+      "timestamp": "2026-09-26T11:33:59Z",
+      "bytes": 10582,
+      "sha256": "4bf528c0d55cdce5c6428a992decd3dda5d2438ab3d24d72a587bf03feb8348a"
+    },
+    {
+      "file": "metrics-5xx-ratio-by-route.json",
+      "kind": "http_get",
+      "query": "GET http://localhost:9090/api/v1/query_range query=[sum by (http_route) (rate(http_server_request_duration_seconds_count{http_response_status_code=~\"5..\"}[1m])) / sum by (http_route) (rate(http_server_request_duration_seconds_count[1m]))] start=1790418754 end=1790422433 step=30",
+      "timestamp": "2026-09-26T11:33:59Z",
+      "bytes": 6930,
+      "sha256": "f5f5d5aa67c4dfe28688016fedc8d798c15ad7f2dd4a84f22cf3200f5bd89e51"
+    },
+    {
+      "file": "metrics-p95-latency-by-route.json",
+      "kind": "http_get",
+      "query": "GET http://localhost:9090/api/v1/query_range query=[histogram_quantile(0.95, sum by (le, http_route) (rate(http_server_request_duration_seconds_bucket[1m])))] start=1790418754 end=1790422433 step=30",
+      "timestamp": "2026-09-26T11:33:59Z",
+      "bytes": 10989,
+      "sha256": "d8cbfd4a830ed7da7d6d04618be9bd8704e682ac48a893b03b9b2d622e515244"
+    },
+    {
+      "file": "metrics-request-rate-by-version.json",
+      "kind": "http_get",
+      "query": "GET http://localhost:9090/api/v1/query_range query=[sum by (service_version) (rate(http_server_request_duration_seconds_count[1m]))] start=1790418754 end=1790422433 step=30",
+      "timestamp": "2026-09-26T11:33:59Z",
+      "bytes": 2914,
+      "sha256": "14463b044226291fab69f20cbfa61f286a6ca8b82dfc554b64f951736fdd01cf"
+    },
+    {
+      "file": "metrics-5xx-ratio-by-version.json",
+      "kind": "http_get",
+      "query": "GET http://localhost:9090/api/v1/query_range query=[sum by (service_version) (rate(http_server_request_duration_seconds_count{http_response_status_code=~\"5..\"}[1m])) / sum by (service_version) (rate(http_server_request_duration_seconds_count[1m]))] start=1790418754 end=1790422433 step=30",
+      "timestamp": "2026-09-26T11:33:59Z",
+      "bytes": 2382,
+      "sha256": "aa8fb3deabbbff74afc60aaa33adf700cc4e2c9e3380dc2920822895a9ad1896"
+    },
+    {
+      "file": "metrics-tasks-created-by-outcome.json",
+      "kind": "http_get",
+      "query": "GET http://localhost:9090/api/v1/query_range query=[sum by (outcome) (rate(relay_tasks_created_total[1m]))] start=1790418754 end=1790422433 step=30",
+      "timestamp": "2026-09-26T11:33:59Z",
+      "bytes": 2694,
+      "sha256": "4c6fde3b349667c3b3564e1f12a1cbcdd79ef1153559f7c429ab7c5023b48f71"
+    },
+    {
+      "file": "metrics-tasks-claims-by-outcome.json",
+      "kind": "http_get",
+      "query": "GET http://localhost:9090/api/v1/query_range query=[sum by (outcome) (rate(relay_tasks_claims_total[1m]))] start=1790418754 end=1790422433 step=30",
+      "timestamp": "2026-09-26T11:33:59Z",
+      "bytes": 6882,
+      "sha256": "3dac13e6e3a43b3613a9657ac523f280d60773543bc3015f32aeb990067dc4a5"
+    },
+    {
+      "file": "metrics-tasks-terminal-by-action-outcome.json",
+      "kind": "http_get",
+      "query": "GET http://localhost:9090/api/v1/query_range query=[sum by (action, outcome) (rate(relay_tasks_terminal_total[1m]))] start=1790418754 end=1790422433 step=30",
+      "timestamp": "2026-09-26T11:33:59Z",
+      "bytes": 4604,
+      "sha256": "59b8a081d57e6031d2fa84b1fcd87656ffe98c811def9538f55d678a2d4e6090"
+    },
+    {
+      "file": "metrics-claim-duration-p95.json",
+      "kind": "http_get",
+      "query": "GET http://localhost:9090/api/v1/query_range query=[histogram_quantile(0.95, sum by (le, outcome) (rate(relay_claim_duration_seconds_bucket[5m])))] start=1790418754 end=1790422433 step=30",
+      "timestamp": "2026-09-26T11:33:59Z",
+      "bytes": 7981,
+      "sha256": "d1130982864b8782ddedf4063ce42a8dacda11bebe8fff76c0ae7917590ffd50"
+    },
+    {
+      "file": "metrics-queue-depth.json",
+      "kind": "http_get",
+      "query": "GET http://localhost:9090/api/v1/query_range query=[sum(relay_queue_depth)] start=1790418754 end=1790422433 step=30",
+      "timestamp": "2026-09-26T11:33:59Z",
+      "bytes": 2268,
+      "sha256": "4fdf1debf679e323d2511b54214b7b6226247bbab01280d967783ee88150d255"
+    },
+    {
+      "file": "metrics-queue-oldest-age-seconds.json",
+      "kind": "http_get",
+      "query": "GET http://localhost:9090/api/v1/query_range query=[max(relay_queue_oldest_age_seconds)] start=1790418754 end=1790422433 step=30",
+      "timestamp": "2026-09-26T11:34:00Z",
+      "bytes": 2859,
+      "sha256": "20207bbc002254da05356c52189ab7392e84ce1f779389ebe2154858532637c5"
+    },
+    {
+      "file": "logs-warn-error.json",
+      "kind": "http_get",
+      "query": "GET http://localhost:3100/loki/api/v1/query_range query=[{service_name=\"agent-relay\"} | detected_level=~\"(?i)warn|warning|error|fatal|critical\"] limit=200 direction=backward start=1790421454 end=1790422433; compacted with jq to key fields (message<=500, stacktrace<=1500 chars)",
+      "timestamp": "2026-09-26T11:34:00Z",
+      "bytes": 310783,
+      "sha256": "e2cb449c425a15b369540e382cd833ad9b8cdcff8ebc5ee457fbcc34bab428a4"
+    },
+    {
+      "file": "logs-warn-error.txt",
+      "kind": "derived",
+      "query": "one-line-per-entry summary of logs-warn-error.json (jq)",
+      "timestamp": "2026-09-26T11:34:00Z",
+      "bytes": 38240,
+      "sha256": "fa7b4b6537dce47ba366d12eaef60db01ac5a61d65ca6a5ac038ad46c8e4aee9"
+    },
+    {
+      "file": "tempo-error-traces-search.json",
+      "kind": "http_get",
+      "query": "GET http://localhost:3200/api/search q=[{ resource.service.name = \"agent-relay\" && (status = error || span.http.response.status_code >= 500) }] limit=20 start=1790421454 end=1790422433",
+      "timestamp": "2026-09-26T11:34:00Z",
+      "bytes": 26438,
+      "sha256": "0ae369a949194b0aada36a92a7bdb1010ba4da3b5f9ab662569da6534badd940"
+    },
+    {
+      "file": "tempo-trace-1.json",
+      "kind": "http_get",
+      "query": "GET http://localhost:3200/api/traces/ac378d002c938c360bdc2f6c815b2ec1 (full detail)",
+      "timestamp": "2026-09-26T11:34:00Z",
+      "bytes": 7672,
+      "sha256": "c4e9aa5e8e1680ae15764b9393a28529fa575f1c0a241bb58d1954a8e201022f"
+    },
+    {
+      "file": "tempo-trace-2.json",
+      "kind": "http_get",
+      "query": "GET http://localhost:3200/api/traces/30aeb3caeb8425c9b94c72a54f641c0f (full detail)",
+      "timestamp": "2026-09-26T11:34:00Z",
+      "bytes": 7672,
+      "sha256": "3d532d9914a67108576beb4e79c498929bb08e0ccb75aab9d9f3effb427d2e7a"
+    },
+    {
+      "file": "tempo-trace-3.json",
+      "kind": "http_get",
+      "query": "GET http://localhost:3200/api/traces/17048133c98ae09ced9db0232ac57e84 (full detail)",
+      "timestamp": "2026-09-26T11:34:01Z",
+      "bytes": 7654,
+      "sha256": "538ed770bf320911d51ec0f97f3a0c32c63de755a93614aefc4d7f029ce71a69"
+    },
+    {
+      "file": "git-log.txt",
+      "kind": "command",
+      "query": "git log --oneline -10",
+      "timestamp": "2026-09-26T11:34:01Z",
+      "bytes": 756,
+      "sha256": "9448e153c92f2c8b4f80194f5e54732abb7448dffbdd201349aa1c70f1ccbd47"
+    },
+    {
+      "file": "changes-versions.json",
+      "kind": "derived",
+      "query": "running version, previous_version and git shas from /version + deploy/history.jsonl",
+      "timestamp": "2026-09-26T11:34:01Z",
+      "bytes": 220,
+      "sha256": "2785dd84ac3115f5fd5b8f5f7638e4a8508240c0fcaacc0f50ef20a8df41905b"
+    },
+    {
+      "file": "changes-diff-stat.txt",
+      "kind": "command",
+      "query": "git diff --stat 64dddaf..0a305bc (head -60)",
+      "timestamp": "2026-09-26T11:34:01Z",
+      "bytes": 680,
+      "sha256": "b5fec61a0d0938b2368dd3a62267d83940025e9066b3bae3dc96ccf268f6ead7"
+    },
+    {
+      "file": "changes-diff.patch",
+      "kind": "command",
+      "query": "git diff 64dddaf..0a305bc -- . ':(exclude)uv.lock' (head -400 lines)",
+      "timestamp": "2026-09-26T11:34:01Z",
+      "bytes": 14119,
+      "sha256": "97189da4cdeb82a78c98a0d4a7378001a002c2f42d3eab5e00250ac40be4aa58"
+    },
+    {
+      "file": "changed-files/buildinfo.py",
+      "kind": "command",
+      "query": "git show 0a305bc:buildinfo.py (redacted; file contents at the running version)",
+      "timestamp": "2026-09-26T11:34:01Z",
+      "bytes": 838,
+      "sha256": "e74a70dcb733c0c4cbab366cda1c6673406c1ec9d5afa355ef248f6c502f6705"
+    },
+    {
+      "file": "changed-files/database.py",
+      "kind": "command",
+      "query": "git show 0a305bc:database.py (redacted; file contents at the running version)",
+      "timestamp": "2026-09-26T11:34:01Z",
+      "bytes": 9813,
+      "sha256": "e7162d422dc1886db66003ef926c65c3e0cc386b0ea4b167ed5e7d565f0d4460"
+    },
+    {
+      "file": "changed-files/logging_config.py",
+      "kind": "command",
+      "query": "git show 0a305bc:logging_config.py (redacted; file contents at the running version)",
+      "timestamp": "2026-09-26T11:34:01Z",
+      "bytes": 3151,
+      "sha256": "0f9c099870f4baa9a8c9684e9cff04b2eeb0e7d2d5049600514648825d0152f5"
+    },
+    {
+      "file": "changed-files/main.py",
+      "kind": "command",
+      "query": "git show 0a305bc:main.py (redacted; file contents at the running version)",
+      "timestamp": "2026-09-26T11:34:01Z",
+      "bytes": 14471,
+      "sha256": "dbafb00eff7f952733322032a409556939af44a0a2d91283c49589b6afef892d"
+    },
+    {
+      "file": "changed-files/telemetry.py",
+      "kind": "command",
+      "query": "git show 0a305bc:telemetry.py (redacted; file contents at the running version)",
+      "timestamp": "2026-09-26T11:34:01Z",
+      "bytes": 10391,
+      "sha256": "c865a5559172cfd0d8ecbc3bd5ba62ec2e0889b1755e795ab63096bb3a32ebb5"
+    }
+  ]
+}
