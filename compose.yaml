@@ -27,8 +27,6 @@ services:
     environment:
       RELAY_DATABASE_URL: postgresql+psycopg://agent_relay:agent_relay@postgres:5432/agent_relay
       DEPLOYMENT_ENVIRONMENT: local
-      # Incident drill (HW4 Step 5): fail 35% of complete requests on purpose.
-      RELAY_FAULT_COMPLETE_5XX_RATE: "0.35"
       # Telemetry goes to the observability stack's collector (observability/compose.yaml).
       # If that stack is down the app keeps serving; exports just fail quietly-ish.
       OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-http://otel-collector:4318}

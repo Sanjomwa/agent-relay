@@ -199,25 +199,3 @@ def test_dashboard_is_asset_and_invalid_input_is_documented_error():
         missing_name = client.post("/api/v1/agents", json={})
         assert missing_name.status_code == 400
         assert missing_name.json()["error"]["code"] == "invalid_input"
-
-
-@pytest.mark.parametrize("rate,expected", [("0", 200), ("1.0", 500)])
-def test_complete_fault_injection_switch(monkeypatch, rate, expected):
-    monkeypatch.setenv("RELAY_FAULT_COMPLETE_5XX_RATE", rate)
-    with TestClient(main.app) as client:
-        _sender, sender_headers = register(client, "sender")
-        recipient, recipient_headers = register(client, "recipient")
-        task_id = client.post(
-            "/api/v1/tasks", headers=sender_headers, json={"to": recipient["agent_id"], "input": "x"}
-        ).json()["task_id"]
-        claim = client.post(
-            "/api/v1/tasks/claim", headers=recipient_headers, json={"worker_id": "w", "wait_seconds": 0}
-        ).json()
-        done = client.post(
-            f"/api/v1/tasks/{task_id}/complete",
-            headers=recipient_headers,
-            json={"claim_token": claim["claim_token"], "output": "X"},
-        )
-        assert done.status_code == expected
-        if expected == 500:
-            assert done.json()["error"]["code"] == "injected_fault"
