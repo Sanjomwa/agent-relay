@@ -17,6 +17,8 @@ from sqlalchemy import DateTime, ForeignKey, Integer, String, Text, UniqueConstr
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, relationship, sessionmaker
 
+from telemetry import instruments
+
 
 def _database_url() -> str:
     return os.getenv("RELAY_DATABASE_URL") or os.getenv("DATABASE_URL") or "sqlite:///./agent-relay.db"
@@ -134,7 +136,9 @@ def _is_sqlite(url: str) -> bool:
     return url.startswith("sqlite")
 
 
-engine_kwargs: dict[str, Any] = {"future": True, "pool_pre_ping": True}
+# hide_parameters keeps bound values (tokens' hashes, task input) out of SQLAlchemy
+# exception text, which ends up in logs and span exception events.
+engine_kwargs: dict[str, Any] = {"future": True, "pool_pre_ping": True, "hide_parameters": True}
 if _is_sqlite(DATABASE_URL):
     engine_kwargs.update({"connect_args": {"check_same_thread": False, "timeout": 30}})
     if DATABASE_URL in {"sqlite://", "sqlite:///:memory:"}:
@@ -231,6 +235,8 @@ def recover_expired_in_session(db: Session, now: datetime) -> int:
                 task.status = "queued"
                 task.finished_at = None
         count += 1
+    if count:
+        instruments.lease_recoveries.add(count)
     return count
 
 

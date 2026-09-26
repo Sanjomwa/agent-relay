@@ -102,7 +102,7 @@ async def run_worker(
                         if heartbeat.status_code == 200:
                             active_lease[0] = parse_lease(heartbeat.json().get("lease_expires_at"))
                         else:
-                            LOGGER.warning("heartbeat for %s rejected: %s", task_id, heartbeat.text)
+                            LOGGER.warning("heartbeat for %s rejected: status=%d", task_id, heartbeat.status_code)
                             return
                     except httpx.HTTPError as exc:
                         LOGGER.warning("heartbeat for %s failed: %s", task_id, exc)

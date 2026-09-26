@@ -19,11 +19,13 @@ from typing import Any, Literal
 from fastapi import Depends, FastAPI, Header, Path as FastAPIPath, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import HTMLResponse, JSONResponse, Response
+from opentelemetry.instrumentation.utils import suppress_instrumentation
 from sqlalchemy import text
 from sqlalchemy.exc import OperationalError
 
 from database import (
     DEFAULT_PAGE_SIZE,
+    engine,
     MAX_BODY_BYTES,
     MAX_PAGE_SIZE,
     RECOVERY_INTERVAL_SECONDS,
@@ -31,8 +33,12 @@ from database import (
     init_db,
     recover_expired,
 )
+import buildinfo
+import telemetry
 from dashboard import dashboard_html
 from errors import RelayError
+from logging_config import configure_logging
+from telemetry import instruments
 from schemas import (
     ClaimRequest,
     ClaimTokenRequest,
@@ -59,7 +65,9 @@ from storage import (
 )
 
 
+configure_logging()
 LOGGER = logging.getLogger("agent_relay")
+ACCESS_LOGGER = logging.getLogger("agent_relay.access")
 
 
 def error_response(code: str, message: str, status_code: int) -> JSONResponse:
@@ -88,7 +96,10 @@ def page_params(limit: int, cursor: str | None) -> tuple[int, tuple[Any, str] | 
 async def recovery_loop(stop: asyncio.Event) -> None:
     while not stop.is_set():
         try:
-            recovered = await asyncio.to_thread(recover_expired)
+            # Background housekeeping every few seconds: don't trace it (it would
+            # dominate trace volume); recoveries are counted and logged instead.
+            with suppress_instrumentation():
+                recovered = await asyncio.to_thread(recover_expired)
             if recovered:
                 LOGGER.info("recovered %d expired attempt(s)", recovered)
         except asyncio.CancelledError:
@@ -147,6 +158,36 @@ async def body_size_limit(request: Request, call_next):
     return await call_next(request)
 
 
+@app.middleware("http")
+async def access_log(request: Request, call_next):
+    # Added after body_size_limit, so it is the outer middleware and also
+    # records that middleware's 413 responses. Logs only method, the matched
+    # route template (never the raw path, which carries task ids), status and
+    # duration: no headers, query strings or bodies.
+    started = time.perf_counter()
+    status = 500
+    try:
+        response = await call_next(request)
+        status = response.status_code
+        return response
+    finally:
+        route = request.scope.get("route")
+        ACCESS_LOGGER.info(
+            "%s %s %d",
+            request.method,
+            getattr(route, "path", None) or "unmatched",
+            status,
+            extra={
+                "fields": {
+                    "method": request.method,
+                    "route": getattr(route, "path", None) or "unmatched",
+                    "status": status,
+                    "duration_ms": round((time.perf_counter() - started) * 1000, 2),
+                }
+            },
+        )
+
+
 @app.get("/health")
 async def health() -> dict[str, str]:
     return {"status": "ok"}
@@ -155,7 +196,8 @@ async def health() -> dict[str, str]:
 @app.get("/ready")
 async def ready() -> JSONResponse:
     try:
-        with db_session() as db:
+        # The probe is excluded from tracing, so keep its SQL spans out too.
+        with suppress_instrumentation(), db_session() as db:
             # Check real tables, not just connectivity: after a volume wipe
             # or failed migration the DB can answer SELECT 1 while every
             # write 500s with "no such table". Missing tables -> 503.
@@ -165,6 +207,11 @@ async def ready() -> JSONResponse:
     except Exception:
         return JSONResponse(status_code=503, content={"status": "not_ready"})
     return JSONResponse(status_code=200, content={"status": "ready"})
+
+
+@app.get("/version")
+async def version() -> dict[str, str]:
+    return buildinfo.version_info()
 
 
 @app.post("/api/v1/agents", status_code=201)
@@ -201,19 +248,24 @@ async def tasks_create(
     current=Depends(current_agent),
     idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
 ) -> JSONResponse:
-    if idempotency_key is not None and (
-        not idempotency_key.strip() or len(idempotency_key) > 255 or "\x00" in idempotency_key
-    ):
-        raise RelayError("invalid_input", "Idempotency-Key must be nonempty and at most 255 characters.", 400)
-    for retry in range(3):
-        try:
-            result = create_task(current.id, body.to, body.input, idempotency_key)
-            return JSONResponse(status_code=201, content=result)
-        except OperationalError as exc:
-            if retry == 2 or "locked" not in str(exc).lower():
-                raise
-            await asyncio.sleep(0.05 * (retry + 1))
-    raise RelayError("storage_error", "The task could not be persisted.", 503)
+    outcome = "error"
+    try:
+        if idempotency_key is not None and (
+            not idempotency_key.strip() or len(idempotency_key) > 255 or "\x00" in idempotency_key
+        ):
+            raise RelayError("invalid_input", "Idempotency-Key must be nonempty and at most 255 characters.", 400)
+        for retry in range(3):
+            try:
+                result = create_task(current.id, body.to, body.input, idempotency_key)
+                outcome = "ok"
+                return JSONResponse(status_code=201, content=result)
+            except OperationalError as exc:
+                if retry == 2 or "locked" not in str(exc).lower():
+                    raise
+                await asyncio.sleep(0.05 * (retry + 1))
+        raise RelayError("storage_error", "The task could not be persisted.", 503)
+    finally:
+        instruments.tasks_created.add(1, {"outcome": outcome})
 
 
 @app.post("/api/v1/tasks/claim")
@@ -221,23 +273,49 @@ async def claim(
     body: ClaimRequest,
     current=Depends(current_agent),
 ) -> Response:
-    deadline = time.monotonic() + body.wait_seconds
-    while True:
-        try:
-            result = await asyncio.to_thread(claim_one, current.id, body.worker_id)
-        except OperationalError as exc:
-            if "locked" not in str(exc).lower():
-                raise
-            result = None
-        if result is not None:
-            return JSONResponse(status_code=200, content=result)
-        remaining = deadline - time.monotonic()
-        if body.wait_seconds == 0 or remaining <= 0:
-            return Response(status_code=204)
-        # Polling is deliberate: a task may be submitted by another API
-        # process, where an in-process event cannot be signalled.  It also
-        # keeps TestClient instances on separate event loops independent.
-        await asyncio.sleep(min(remaining, 0.5))
+    started = time.monotonic()
+    deadline = started + body.wait_seconds
+    outcome = "error"
+    try:
+        while True:
+            try:
+                result = await asyncio.to_thread(claim_one, current.id, body.worker_id)
+            except OperationalError as exc:
+                if "locked" not in str(exc).lower():
+                    raise
+                result = None
+            if result is not None:
+                outcome = "claimed"
+                return JSONResponse(status_code=200, content=result)
+            remaining = deadline - time.monotonic()
+            if body.wait_seconds == 0 or remaining <= 0:
+                outcome = "empty"
+                return Response(status_code=204)
+            # Polling is deliberate: a task may be submitted by another API
+            # process, where an in-process event cannot be signalled.  It also
+            # keeps TestClient instances on separate event loops independent.
+            await asyncio.sleep(min(remaining, 0.5))
+    except asyncio.CancelledError:
+        # The caller hung up mid long-poll: nothing was claimed and nothing failed.
+        outcome = "empty"
+        raise
+    finally:
+        instruments.tasks_claims.add(1, {"outcome": outcome})
+        instruments.claim_duration.record(time.monotonic() - started, {"outcome": outcome})
+
+
+def metered_terminal(task_id: str, agent_id: str, claim_token: str, action: Literal["complete", "fail"], value: str):
+    outcome = "error"
+    try:
+        result = commit_terminal(task_id, agent_id, claim_token, action=action, value=value)
+        outcome = "ok"
+        return result
+    except RelayError as exc:
+        if exc.code in {"stale_claim", "conflicting_terminal"}:
+            outcome = "conflict"
+        raise
+    finally:
+        instruments.tasks_terminal.add(1, {"action": action, "outcome": outcome})
 
 
 @app.post("/api/v1/tasks/{task_id}/heartbeat")
@@ -255,7 +333,7 @@ async def task_complete(
     task_id: str = FastAPIPath(..., min_length=1, max_length=100),
     current=Depends(current_agent),
 ) -> dict[str, str]:
-    return commit_terminal(task_id, current.id, body.claim_token, action="complete", value=body.output)
+    return metered_terminal(task_id, current.id, body.claim_token, "complete", body.output)
 
 
 @app.post("/api/v1/tasks/{task_id}/fail")
@@ -264,7 +342,7 @@ async def task_fail(
     task_id: str = FastAPIPath(..., min_length=1, max_length=100),
     current=Depends(current_agent),
 ) -> dict[str, str]:
-    return commit_terminal(task_id, current.id, body.claim_token, action="fail", value=body.error)
+    return metered_terminal(task_id, current.id, body.claim_token, "fail", body.error)
 
 
 @app.get("/api/v1/tasks/{task_id}")
@@ -306,6 +384,11 @@ async def dashboard() -> HTMLResponse:
 @app.get("/dashboard", response_class=HTMLResponse)
 async def dashboard_alias() -> HTMLResponse:
     return HTMLResponse(dashboard_html())
+
+
+# Instrument after all middleware/routes are defined. Exports only when
+# OTEL_EXPORTER_OTLP_ENDPOINT is set.
+telemetry.configure_from_env(app, engine)
 
 
 def build_cli() -> argparse.ArgumentParser:
