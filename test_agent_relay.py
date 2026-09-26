@@ -98,7 +98,7 @@ def test_protocol_idempotency_terminal_retry_and_auth_boundary():
         assert "claim_token" not in attempts["items"][0]
 
 
-def test_sqlite_atomic_claims_distribute_without_overlap():
+def test_concurrent_claims_distribute_without_overlap():
     with TestClient(main.app) as client:
         _sender, sender_headers = register(client, "sender")
         recipient, _recipient_headers = register(client, "recipient")

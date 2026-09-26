@@ -144,11 +144,15 @@ def claim_one(agent_id: str, worker_id: str | None) -> dict[str, Any] | None:
     with immediate_transaction() as db:
         now = utcnow()
         recover_expired_in_session(db, now)
+        # PostgreSQL has no writer lock here, so lock the candidate row and skip
+        # rows other claimers hold. SQLAlchemy's SQLite dialect omits this
+        # clause; SQLite is serialized by BEGIN IMMEDIATE instead.
         task = db.scalar(
             select(Task)
             .where(Task.recipient_id == agent_id, Task.status == "queued")
             .order_by(Task.created_at, Task.id)
             .limit(1)
+            .with_for_update(skip_locked=True)
         )
         if task is None:
             return None

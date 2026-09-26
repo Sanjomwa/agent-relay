@@ -183,9 +183,8 @@ def immediate_transaction() -> Generator[Session, None, None]:
     ``BEGIN IMMEDIATE`` writer reservation serializes claims (and recovery or
     terminal submissions) across API processes, giving each task one active
     lease. On PostgreSQL this relies on SQLAlchemy's normal autobegin
-    transaction instead; adding ``SELECT ... FOR UPDATE SKIP LOCKED`` to the
-    claim query is the seam SPEC.md calls out for hardening concurrent claims
-    on a PostgreSQL backend.
+    transaction instead; the claim query in :mod:`storage` uses
+    ``SELECT ... FOR UPDATE SKIP LOCKED`` to keep concurrent claims exclusive.
     """
 
     connection = engine.connect()

@@ -50,16 +50,7 @@ jobs:
       - name: Run test suite (incl. Question 2 integration test) against real PostgreSQL
         env:
           RELAY_DATABASE_URL: postgresql+psycopg://agent_relay:agent_relay@localhost:5433/agent_relay_test
-        run: |
-          # test_sqlite_atomic_claims_distribute_without_overlap is deliberately
-          # excluded here: it asserts a concurrency guarantee that comes from
-          # SQLite's BEGIN IMMEDIATE whole-database writer lock specifically.
-          # PostgreSQL has no equivalent without adding SELECT ... FOR UPDATE
-          # SKIP LOCKED to the claim query -- the seam SPEC.md and database.py
-          # call out as a future hardening exercise, not something this
-          # homework asks for. Every other test, including the Question 2
-          # integration test, runs and must pass against real Postgres.
-          uv run pytest -q -k "not test_sqlite_atomic_claims_distribute_without_overlap"
+        run: uv run pytest -q
 
       - name: Stop ephemeral PostgreSQL
         if: always()
