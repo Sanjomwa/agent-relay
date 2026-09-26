@@ -1,0 +1,61 @@
+# User-impact alert: agents cannot claim or complete tasks.
+#
+# Evaluation is deliberately short (15s interval, for: 1m) so the alert is
+# testable in a few minutes. Production would use a longer window (for example a
+# 5-10m rate window with for: 5-10m) to avoid paging on brief blips.
+groups:
+  - name: agent-relay-user-impact
+    interval: 15s
+    rules:
+      - alert: RelayClaimCompleteErrorRatioHigh
+        # Ratio of 5xx responses on the claim + complete routes, per
+        # service/environment/version, with a minimum-volume guard so a single error
+        # at near-zero traffic cannot fire it: at least 20 claim/complete requests in
+        # the last 2 minutes (about 0.17 req/s).
+        #
+        # The guard is an absolute request COUNT, not a rate floor, on purpose. A real
+        # outage starves its own traffic: when Postgres was stopped, throughput on
+        # these routes collapsed from ~5 req/s to ~0.4 req/s (every request fails
+        # slowly and workers back off). A rate floor of 0.5 req/s cancelled the alert
+        # at exactly that moment (ratio 100%, alert reverted to inactive), which is
+        # why this floor sits well below what an outage produces.
+        expr: |
+          (
+            sum by (service_name, deployment_environment_name, service_version) (
+              rate(http_server_request_duration_seconds_count{
+                http_route=~"/api/v1/tasks/claim|/api/v1/tasks/\\{task_id\\}/complete",
+                http_response_status_code=~"5.."
+              }[1m])
+            )
+            /
+            sum by (service_name, deployment_environment_name, service_version) (
+              rate(http_server_request_duration_seconds_count{
+                http_route=~"/api/v1/tasks/claim|/api/v1/tasks/\\{task_id\\}/complete"
+              }[1m])
+            )
+          > 0.10
+          )
+          and
+          (
+            sum by (service_name, deployment_environment_name, service_version) (
+              increase(http_server_request_duration_seconds_count{
+                http_route=~"/api/v1/tasks/claim|/api/v1/tasks/\\{task_id\\}/complete"
+              }[2m])
+            )
+          >= 20
+          )
+        for: 1m
+        labels:
+          severity: critical
+          service: "{{ $labels.service_name }}"
+          environment: "{{ $labels.deployment_environment_name }}"
+          version: "{{ $labels.service_version }}"
+          owner: relay-oncall
+        annotations:
+          summary: "Agents cannot claim/complete tasks on {{ $labels.service_name }} ({{ $labels.deployment_environment_name }}, {{ $labels.service_version }})"
+          description: >-
+            {{ $value | humanizePercentage }} of claim and complete requests are failing with 5xx
+            (threshold 10% over the last minute, with at least 20 requests in the last 2 minutes).
+            Tasks are not being delivered or finished; senders' work is stuck in the queue.
+          dashboard_url: "http://localhost:3000/d/agent-relay-overview/agent-relay-overview?orgId=1&var-environment={{ $labels.deployment_environment_name }}&var-version={{ $labels.service_version }}"
+          runbook: "incident-response/runbooks/claim-complete-5xx.md"

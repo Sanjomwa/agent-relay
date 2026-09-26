@@ -27,6 +27,9 @@ services:
     environment:
       RELAY_DATABASE_URL: postgresql+psycopg://agent_relay:agent_relay@postgres:5432/agent_relay
       DEPLOYMENT_ENVIRONMENT: local
+      # Telemetry goes to the observability stack's collector (observability/compose.yaml).
+      # If that stack is down the app keeps serving; exports just fail quietly-ish.
+      OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-http://otel-collector:4318}
     healthcheck:
       # The slim image has no curl; urlopen raises on non-2xx, so a 503 fails.
       test:
