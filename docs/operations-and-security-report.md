@@ -110,7 +110,7 @@ From `incident-response/autonomy-policy.yaml`:
 - **Confidence can only downgrade.** `confidence.escalate_below: 0.5` forces `escalate` below 0.5. At or above 0.5 the value changes nothing; `test_confidence_never_changes_an_outcome_at_or_above_threshold` checks that 0.5 to 1.0 produce identical decisions.
 - **Model text is never executed.** The engine can run only the runbook scripts named in the policy, with arguments validated by regex and compared with facts the code observed itself (Prometheus alerts, `/version`, `deploy/history.jsonl`, `docker image inspect`).
 - **`approve` re-checks everything.** `respond.py approve <ID>` gathers fresh facts, runs the decision again, and refuses unless the executable command is identical to the one originally decided.
-- Tests: `incident-response/tests/test_policy.py` and `test_respond.py` (table-driven cases for approval, wrong version, missing image at confidence 0.99, shell commands as proposals, schema-invalid output, second action, low confidence), plus 20 redactor tests; 82 pass.
+- Tests: `incident-response/tests/test_policy.py` and `test_respond.py` (table-driven cases for approval, wrong version, missing image at confidence 0.99, shell commands as proposals, schema-invalid output, second action, low confidence), plus 20 redactor tests; 84 pass.
 
 ### 2.5 Evidence collection
 
@@ -325,8 +325,8 @@ Coverage: neither tool found the public API docs, the Postgres `DETAIL` echo, th
 - The Claude CLI is not pinned; it moved from 2.1.278 to 2.1.283 during the homework without an explicit upgrade.
 - The Postgres races K-005, K-006 and K-007 are open.
 - M-002 (chunked requests bypass the body-size limit) is open; exposure is lower now that the port is loopback-only.
-- The app test suite is not isolated from the caller's environment: if `RELAY_ENROLLMENT_SECRET` is exported in the shell, four tests in `test_agent_relay.py` fail with 401 on either database backend, because they register agents without the header. Run the tests with the variable unset (§8) until the test fixture clears it.
-- A quarantined evidence packet leaves an empty `incidents/<ID>/` directory behind (the packet itself moves to `deploy/quarantine/`).
+- The app test suite is not isolated from the caller's environment: if `RELAY_ENROLLMENT_SECRET` is exported in the shell, four tests in `test_agent_relay.py` fail with 401 on either database backend, because they register agents without the header. Run the tests with the variable unset (§8) until the test fixture clears it. (fixed in 71dac87)
+- A quarantined evidence packet leaves an empty `incidents/<ID>/` directory behind (the packet itself moves to `deploy/quarantine/`). (fixed in 71dac87)
 - The lab runs on one machine; C: had 10 to 21 GB free during the work, and Prometheus, Loki and Tempo keep 2 days of data.
 
 ## 8. How to reproduce (fresh clone)
@@ -363,10 +363,8 @@ scripts/release.sh
 INCIDENT_ID=manual incident-response/runbooks/rollback.sh <version from deploy/history.jsonl>
 incident-response/runbooks/verify-recovery.sh <INCIDENT_ID> <expected version>
 
-# Tests (name the paths so pytest cannot collect an audit snapshot; unset the enrollment
-# secret, because test_agent_relay.py registers agents without the header)
-env -u RELAY_ENROLLMENT_SECRET uv run pytest -q test_agent_relay.py test_observability.py
-uv run --with pytest --with pyyaml --with jsonschema pytest -q incident-response/tests
+# Tests
+uv run pytest -q                                   # 93 tests, no Docker needed
 
 # Security audit
 uvx semgrep scan --metrics=off --config p/python --config p/secrets --config p/dockerfile \
