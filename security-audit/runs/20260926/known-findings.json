@@ -11,8 +11,8 @@
       "source": "manual",
       "confidence": 0.95,
       "recommendation": "Set RELAY_ENROLLMENT_SECRET from an untracked .env/Secret in compose and k8s; fail closed (refuse to start or refuse registration) when unset outside dev.",
-      "disposition": null,
-      "disposition_rationale": null
+      "disposition": "fix_now",
+      "disposition_rationale": "Require RELAY_ENROLLMENT_SECRET from an untracked .env, and bind the app port to 127.0.0.1."
     },
     {
       "id": "K-002",
@@ -25,8 +25,8 @@
       "source": "manual",
       "confidence": 0.95,
       "recommendation": "Move to an untracked .env / k8s Secret created out of band; use a random password; keep CI's throwaway DB but bind it to 127.0.0.1.",
-      "disposition": null,
-      "disposition_rationale": null
+      "disposition": "fix_later",
+      "disposition_rationale": "The dev-only default, and Postgres isn't published. Changing the password on an existing volume needs ALTER USER; not worth the risk before the deadline."
     },
     {
       "id": "K-003",
@@ -39,8 +39,8 @@
       "source": "manual",
       "confidence": 0.95,
       "recommendation": "Pass docs_url=None, redoc_url=None, openapi_url=None in non-dev environments (or gate them behind auth).",
-      "disposition": null,
-      "disposition_rationale": null
+      "disposition": "fix_later",
+      "disposition_rationale": "Info disclosure only, and localhost-bound after the K-001 fix."
     },
     {
       "id": "K-004",
@@ -53,7 +53,7 @@
       "source": "manual",
       "confidence": 0.8,
       "recommendation": "Scrub exception messages for psycopg IntegrityError/DETAIL before logging/recording (log exception type + constraint name only), or set Postgres log verbosity for client errors to TERSE on the connection.",
-      "disposition": null,
+      "disposition": "fix_later",
       "disposition_rationale": null
     },
     {
@@ -67,8 +67,8 @@
       "source": "manual",
       "confidence": 0.6,
       "recommendation": "SELECT ... FOR UPDATE on the task (and attempt) rows in recovery, or a guarded UPDATE ... WHERE status='processing' AND attempt_count = <expected>.",
-      "disposition": null,
-      "disposition_rationale": null
+      "disposition": "fix_later",
+      "disposition_rationale": "Postgres races, from code reading; integrity rather than confidentiality."
     },
     {
       "id": "K-006",
@@ -81,8 +81,8 @@
       "source": "manual",
       "confidence": 0.55,
       "recommendation": "Lock the attempt/task rows (FOR UPDATE) in heartbeat and commit_terminal, or make the writes conditional on outcome='processing'.",
-      "disposition": null,
-      "disposition_rationale": null
+      "disposition": "fix_later",
+      "disposition_rationale": "Postgres races, from code reading; integrity rather than confidentiality."
     },
     {
       "id": "K-007",
@@ -95,8 +95,8 @@
       "source": "manual",
       "confidence": 0.7,
       "recommendation": "Catch IntegrityError on uq_task_sender_idempotency and re-read the existing row (or use INSERT ... ON CONFLICT DO NOTHING RETURNING).",
-      "disposition": null,
-      "disposition_rationale": null
+      "disposition": "fix_later",
+      "disposition_rationale": "Postgres races, from code reading; integrity rather than confidentiality."
     },
     {
       "id": "K-008",
@@ -109,8 +109,8 @@
       "source": "manual",
       "confidence": 0.9,
       "recommendation": "Add --setting-sources \"\" (or --safe-mode) to the responder and model-review invocations so only explicit --settings apply; keep the canary as a regression check after CLI upgrades.",
-      "disposition": null,
-      "disposition_rationale": null
+      "disposition": "fix_now",
+      "disposition_rationale": "Add --setting-sources \"\" to the responder and the model review, then re-run the canary."
     },
     {
       "id": "K-009",
@@ -123,8 +123,8 @@
       "source": "manual",
       "confidence": 0.9,
       "recommendation": "Add a check that relay_queue_depth returns to its pre-incident level (or oldest queued age < N s) within the wait window; report stranded work explicitly.",
-      "disposition": null,
-      "disposition_rationale": null
+      "disposition": "fix_later",
+      "disposition_rationale": "Verification gap, not a vulnerability."
     },
     {
       "id": "K-010",
@@ -137,8 +137,8 @@
       "source": "manual",
       "confidence": 0.9,
       "recommendation": "Add a precondition tying rollback to the change: e.g. the failing series' 5xx ratio was ~0 on previous_version and rose after running_deployed_at, or require a second approver / explicit confirmation text when the failure started long after the deploy.",
-      "disposition": null,
-      "disposition_rationale": null
+      "disposition": "accepted_risk",
+      "disposition_rationale": "By design for an L1 action, where human approval is the gate. Mandatory precondition if rollback is ever promoted to L2: a deploy-correlation check (the failing version was deployed shortly before activeAt, and the previous version was healthy)."
     },
     {
       "id": "K-011",
@@ -151,8 +151,8 @@
       "source": "manual",
       "confidence": 0.95,
       "recommendation": "Extend redact() and the scan to *_PASSWORD/*_SECRET/*_TOKEN key=value and YAML forms, and scan for the actual RELAY_ENROLLMENT_SECRET/POSTGRES_PASSWORD values like the Grafana password.",
-      "disposition": null,
-      "disposition_rationale": null
+      "disposition": "fix_now",
+      "disposition_rationale": "Redact key-like secret values at evidence-collection time and extend the scan. Do NOT edit already-committed incident evidence (it would break its manifest hashes; the value is the public dev default)."
     }
   ]
 }

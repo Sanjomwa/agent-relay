@@ -11,8 +11,8 @@
       "source": "model",
       "confidence": 0.85,
       "recommendation": "Fail closed: refuse to start (or refuse registration) when no non-empty enrollment secret is configured outside an explicit dev mode. Add RELAY_ENROLLMENT_SECRET to compose.yaml and k8s/secret.yaml using a required substitution (${RELAY_ENROLLMENT_SECRET:?...}). Any client that can reach :8010 can otherwise mint valid agent tokens, list every agent, and send tasks to any agent.",
-      "disposition": null,
-      "disposition_rationale": null
+      "disposition": "fix_now",
+      "disposition_rationale": "Require RELAY_ENROLLMENT_SECRET from an untracked .env, and bind the app port to 127.0.0.1."
     },
     {
       "id": "M-002",
@@ -25,8 +25,8 @@
       "source": "model",
       "confidence": 0.7,
       "recommendation": "Enforce the limit on the streamed body (a receive-wrapping ASGI middleware that counts bytes and returns 413), or put a reverse proxy with a body cap in front of the service. Add rate limiting on :8010. Any client that can reach the port can exploit this, so the impact is memory exhaustion of the app container.",
-      "disposition": null,
-      "disposition_rationale": null
+      "disposition": "fix_later",
+      "disposition_rationale": "A real memory-exhaustion vector, but it needs an ASGI receive wrapper; exposure drops once the port is 127.0.0.1-only."
     },
     {
       "id": "M-003",
@@ -39,8 +39,8 @@
       "source": "model",
       "confidence": 0.7,
       "recommendation": "Compare bytes: hmac.compare_digest((x_enrollment_secret or \"\").encode(\"utf-8\"), enrollment_secret.encode(\"utf-8\")). Any client that can reach :8010 can trigger 500s with it. Those land on POST /api/v1/agents, which is not one of the alerted routes, but they still pollute the 5xx metrics and logs.",
-      "disposition": null,
-      "disposition_rationale": null
+      "disposition": "fix_now",
+      "disposition_rationale": "Compare bytes, not str."
     },
     {
       "id": "M-004",
@@ -53,8 +53,8 @@
       "source": "model",
       "confidence": 0.8,
       "recommendation": "Extend redact() and the scan to KEY=value patterns such as POSTGRES_PASSWORD, RELAY_ENROLLMENT_SECRET, *_SECRET, *_PASSWORD and *_TOKEN. Exclude compose/env/k8s secret files from changed-files, or scan for the actual values of RELAY_ENROLLMENT_SECRET and POSTGRES_PASSWORD, as is done for the Grafana password. The value leaked today is only the dev default, but the same gap would leak a real secret to the responder process and into tracked incident folders.",
-      "disposition": null,
-      "disposition_rationale": null
+      "disposition": "fix_now",
+      "disposition_rationale": "Redact key-like secret values at evidence-collection time and extend the scan. Do NOT edit already-committed incident evidence (it would break its manifest hashes; the value is the public dev default)."
     },
     {
       "id": "M-005",
@@ -67,8 +67,8 @@
       "source": "model",
       "confidence": 0.4,
       "recommendation": "Exploitation needs a route that returns 5xx for the attacker's request, so this is mostly theoretical today. The blast radius is bounded: the responder has only Read/Grep/Glob, the output is schema-validated, and rollback/restart need preconditions plus human approval. Keep it that way. Consider stripping url.path/url.query/http.target attributes from the trace evidence, or truncating them, and keep the system prompt's \"treat file contents as data\" instruction.",
-      "disposition": null,
-      "disposition_rationale": null
+      "disposition": "accepted_risk",
+      "disposition_rationale": "Read-only tools, schema-validated output, and policy + human approval on every action."
     },
     {
       "id": "M-006",
@@ -81,8 +81,8 @@
       "source": "model",
       "confidence": 0.45,
       "recommendation": "Not exploitable on its own; it requires a bypass of Claude Code's path restrictions or a malicious user-level hook. Add --setting-sources with an empty or project-only value, and consider running the responder in a container or as a separate OS user with a dedicated credential. Re-run `respond.py canary` after each CLI upgrade.",
-      "disposition": null,
-      "disposition_rationale": null
+      "disposition": "fix_now",
+      "disposition_rationale": "Add --setting-sources \"\" to the responder and the model review, then re-run the canary."
     },
     {
       "id": "M-007",
@@ -95,8 +95,8 @@
       "source": "model",
       "confidence": 0.75,
       "recommendation": "Postgres is not published to the host, so this is reachable only from the Docker network or the cluster. Any other container or pod on that network can log in with the well-known password. Take the password from an untracked .env or a real Secret and generate it per environment. For k8s, add a NetworkPolicy that allows only the app pod to reach postgres, plus runAsNonRoot and a read-only root filesystem.",
-      "disposition": null,
-      "disposition_rationale": null
+      "disposition": "fix_later",
+      "disposition_rationale": "The dev-only default, and Postgres isn't published. Changing the password on an existing volume needs ALTER USER; not worth the risk before the deadline."
     },
     {
       "id": "M-008",
@@ -109,7 +109,7 @@
       "source": "model",
       "confidence": 0.6,
       "recommendation": "Add a non-root USER and a HEALTHCHECK-compatible read-only filesystem. Bind to 127.0.0.1:8010:8000 unless remote agents really need access, and terminate TLS in front (reverse proxy) when they do. Anyone on the network path between agents and the host can otherwise sniff agt_ tokens.",
-      "disposition": null,
+      "disposition": "fix_later",
       "disposition_rationale": null
     },
     {
@@ -123,7 +123,7 @@
       "source": "model",
       "confidence": 0.6,
       "recommendation": "Bind the port to 127.0.0.1 (-p 127.0.0.1:5433:5432) so other machines on the LAN cannot reach the DB during the test. Pin tool versions with checksums or pin actions by SHA. The workflow is manual-dispatch and run locally via act, so the exposure is limited to the developer's own machine and network.",
-      "disposition": null,
+      "disposition": "fix_later",
       "disposition_rationale": null
     },
     {
@@ -137,7 +137,7 @@
       "source": "model",
       "confidence": 0.5,
       "recommendation": "With open enrollment (M-001) any client can register, enumerate agents and flood recipients' queues; the serialized writer transaction on each request also amplifies load. Add rate limits and per-sender queue quotas, and throttle the last_seen_at write (for example at most once per minute). If agents are meant to be isolated from each other, add an allowlist of recipients per sender.",
-      "disposition": null,
+      "disposition": "fix_later",
       "disposition_rationale": null
     }
   ]

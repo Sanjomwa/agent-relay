@@ -11,7 +11,7 @@
       "source": "semgrep",
       "confidence": 0.8,
       "recommendation": "Pin third-party actions to a full commit SHA (keep the tag as a comment).",
-      "disposition": null,
+      "disposition": "fix_later",
       "disposition_rationale": null
     },
     {
@@ -25,7 +25,7 @@
       "source": "semgrep",
       "confidence": 0.8,
       "recommendation": "Pin the uv installer by version and checksum, or use astral-sh/setup-uv pinned to a commit SHA.",
-      "disposition": null,
+      "disposition": "fix_later",
       "disposition_rationale": null
     },
     {
@@ -39,7 +39,7 @@
       "source": "semgrep",
       "confidence": 0.9,
       "recommendation": "Add a non-root USER (e.g. uid 10001) after installing dependencies; the app needs no root.",
-      "disposition": null,
+      "disposition": "fix_later",
       "disposition_rationale": null
     },
     {
@@ -53,7 +53,7 @@
       "source": "semgrep",
       "confidence": 0.85,
       "recommendation": "Add securityContext.runAsNonRoot: true (and a runAsUser) to the pod spec.",
-      "disposition": null,
+      "disposition": "fix_later",
       "disposition_rationale": null
     },
     {
@@ -67,8 +67,8 @@
       "source": "semgrep",
       "confidence": 0.8,
       "recommendation": "Set readOnlyRootFilesystem: true and mount emptyDir for paths that need writes.",
-      "disposition": null,
-      "disposition_rationale": null
+      "disposition": "accepted_risk",
+      "disposition_rationale": "Local kind lab."
     },
     {
       "id": "S-006",
@@ -81,7 +81,7 @@
       "source": "semgrep",
       "confidence": 0.85,
       "recommendation": "Add securityContext.runAsNonRoot: true (and a runAsUser) to the pod spec.",
-      "disposition": null,
+      "disposition": "fix_later",
       "disposition_rationale": null
     },
     {
@@ -95,8 +95,8 @@
       "source": "semgrep",
       "confidence": 0.8,
       "recommendation": "Set readOnlyRootFilesystem: true and mount emptyDir for paths that need writes.",
-      "disposition": null,
-      "disposition_rationale": null
+      "disposition": "accepted_risk",
+      "disposition_rationale": "Local kind lab."
     },
     {
       "id": "S-008",
@@ -109,8 +109,8 @@
       "source": "semgrep",
       "confidence": 0.2,
       "recommendation": "No change needed if confirmed: the line logs the agent id and file path, not the token.",
-      "disposition": null,
-      "disposition_rationale": null
+      "disposition": "false_positive",
+      "disposition_rationale": "The line logs the agent id and the credentials file path, not the token."
     }
   ]
 }
