@@ -1,0 +1,4 @@
+uvx semgrep scan --metrics=off --disable-version-check --config p/python --config p/secrets --config p/dockerfile --config p/github-actions --config p/docker-compose --config p/kubernetes --json --output security-audit/runs/20260926/semgrep.json .
+semgrep --version: 1.178.0 (via uvx)
+cwd: repository root; semgrep restricts itself to git-tracked files (the snapshot folder is gitignored and yields 0 targets, so the scan runs from the root over the same tracked-file set)
+run at: 2026-09-27T09:23:37Z

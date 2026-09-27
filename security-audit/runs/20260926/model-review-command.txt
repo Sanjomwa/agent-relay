@@ -1,0 +1,9 @@
+# recorded 2026-09-26T19:30:00Z
+cwd: /home/sanjomwa/Projects/agent-relay/security-audit/runs/20260926/snapshot
+claude --version: 2.1.283 (Claude Code)
+model: sonnet
+budget: 2.00 USD
+environment (names only): HOME, LANG, LOGNAME, PATH, TERM, USER
+prompt: security-audit/audit-brief.md + one closing sentence, on stdin
+command:
+  claude -p --output-format json --json-schema 'SCHEMA_FROM_security-audit/findings.schema.json(wrapped in {findings:[...]})' --tools Read,Grep,Glob --permission-mode dontAsk --strict-mcp-config --mcp-config '{"mcpServers":{}}' --no-session-persistence --disable-slash-commands --no-chrome --settings '{"advisorModel":""}' --max-budget-usd 2.00 --model sonnet

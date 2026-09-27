@@ -1,0 +1,21 @@
+{
+  "note": "The raw CLI envelope (full model transcript result, session id, usage) and the unmodified model-review.json are kept locally in the gitignored local-only/ folder. The committed model-review.json is identical except that the public dev-default DB password quoted as evidence is masked as <dev-default>.",
+  "original_model_review_sha256": "ea8252bda9d3703b5fa9320df8091f7ddaac24e13ce71aadcf5b8e6822ca9f20",
+  "envelope_sha256": "97bf8df091f304da98ad6d66e9d5612c8fef4cfd68c5a3eba3143870a99d0bde",
+  "model": [
+    "claude-sonnet-5"
+  ],
+  "total_cost_usd": 0.5899907999999999,
+  "num_turns": 32,
+  "duration_ms": 114985,
+  "duration_api_ms": 113586,
+  "permission_denials": 0,
+  "usage": {
+    "input_tokens": 16,
+    "output_tokens": 11858,
+    "cache_read_input_tokens": 429914,
+    "cache_creation_input_tokens": 96349
+  },
+  "is_error": false,
+  "subtype": "success"
+}

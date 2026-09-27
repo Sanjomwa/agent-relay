@@ -1,0 +1,40 @@
+# Capability inventory: incident responder and orchestrator
+
+Inventoried 2026-09-26 on the developer machine (WSL2 + Docker Desktop). Sources: `incident-response/respond.py`, the canary (`incident-response/incidents/canary-20260926/canary-analysis.json`), `claude --help`, and the key names (never values) of the user's Claude settings files.
+
+Status: **needed** = required for the job · **could be removed** = can be tightened with a known change · **risk accepted** = kept deliberately, reason given.
+
+## A. The responder (headless `claude -p`)
+
+| # | Capability | Current state | Evidence | Status |
+|---|---|---|---|---|
+| A1 | Built-in tools | `Read`, `Grep`, `Glob`, plus the CLI-internal `StructuredOutput` added by `--json-schema`. No `Bash`, `Edit`, `Write`, `WebFetch`, `WebSearch`, `Task`. | `--tools Read,Grep,Glob`; canary init tool list | needed |
+| A2 | File read scope | Working directory = `incidents/<ID>/evidence/` only. Reads outside it are denied by `--permission-mode dontAsk` (6 of 6 canary attempts: absolute and relative paths to `observability/.env` and `deploy/history.jsonl`, Grep on `observability/`, Glob on `deploy/`). The confinement is enforced by Claude Code's permission layer, not by the OS: the process runs as the developer's user. | canary `permission_denials` | needed; OS-level isolation (container/user) **could be added** |
+| A3 | Shell | None. The canary's shell request got "I have no shell tool". | canary step 7 | needed (none) |
+| A4 | MCP servers | None: `--strict-mcp-config --mcp-config '{"mcpServers":{}}'`; canary init `mcp_servers: []`. The user's claude.ai connectors (Gmail, Calendar, Slack, …) are not loaded in this mode. | canary init | needed (none) |
+| A5 | Network | Only the Claude API the CLI talks to (plus the CLI's own update/telemetry endpoints). No network tools are exposed to the model. Evidence content (logs, traces, diffs) is sent to the Anthropic API as part of the prompt. | flags; A1 | risk accepted: sending evidence to the model provider is the point; the evidence is secret-scanned first |
+| A6 | Credentials in reach | The process runs with the developer's **claude.ai OAuth session** (under `$HOME`; `HOME` must stay set for auth). The model cannot read it through its tools (A2), but the process holds it. A CLI bug or a permission bypass would expose it, and it is the same session the developer uses interactively. Environment is an allowlist (`HOME, LANG, LOGNAME, PATH, TERM, USER`); no RELAY_*, OTEL_*, GRAFANA_*, POSTGRES_*, DB URLs, or parent-session `CLAUDE_CODE_*` variables. | `respond.py` `ENV_ALLOWLIST`; `responder-command.txt` | risk accepted for a local drill; **could be removed** with a dedicated, scoped API key (`ANTHROPIC_API_KEY` + `--bare`) in a separate user/container |
+| A7 | Model and CLI | `--model sonnet` (resolved to `claude-sonnet-5`); Claude Code **2.1.283** (it was 2.1.278 at the start of the homework). | envelope `modelUsage`; `claude --version` | needed |
+| A8 | CLI provenance | Native installer: `~/.local/bin/claude` → `~/.local/share/claude/versions/2.1.283` (ELF x86-64), owned by the user. The version changed during the week without an explicit upgrade step; `autoUpdates` in `~/.claude.json` is `false`, so the change came from the native installer's own update path. Nothing pins or verifies the binary the orchestrator runs. | `readlink`, `file` | **could be removed**: pin the version and record its hash in each incident (the version is already recorded) |
+| A9 | User settings leaking into headless runs | `~/.claude/settings.json` keys: `advisorModel`, `theme`. **`advisorModel`** added a server-side `advisor` tool (forwards the conversation to another model) to every headless run until it was neutralised with `--settings '{"advisorModel":""}'` (Step 4). `theme` has no effect headless. `~/.claude.json` (CLI state; 70 KB of keys such as caches and per-project state) has no top-level `mcpServers`; this project's `allowedTools` list is empty. No `settings.local.json`, no user `CLAUDE.md`, no hooks key. The CLI still loads user/project settings by default: any setting or hook added later would silently apply to the responder. | key listing; Step 4 probe | **could be removed**: add `--setting-sources ""` (or `--safe-mode`) so only the explicit `--settings` apply; keep the advisor override as a belt-and-braces |
+| A10 | Skills / slash commands / plugins | Disabled for the run: `--disable-slash-commands`; no plugin or skill appeared in the canary tool list. The user has plugin marketplaces and 1 skill directory installed for interactive use. | flags; `~/.claude/plugins`, `~/.claude/skills` | needed (disabled) |
+| A11 | Session persistence | Off (`--no-session-persistence`): transcripts are not written to `~/.claude/projects`. | flags | needed |
+| A12 | Budget cap | `--max-budget-usd 1.00` per call (actual: $0.14 to $0.26). At most 2 calls per incident (one retry on invalid output), so at most $2.00 per incident; no cap across incidents. Model review for this audit: $2.00 cap, $0.59 actual. | `respond.py` | needed; a per-day cap across incidents **could be added** |
+| A13 | Output authority | None by itself. The output is schema-validated in code; the policy engine decides; confidence can only downgrade; model text is never executed. | `policy.py`; tests | needed |
+
+## B. The orchestrator (`respond.py`, run by the developer)
+
+| # | Capability | Current state | Status |
+|---|---|---|---|
+| B1 | Runs as | The developer's own user, with the full environment of that shell. It is **not** sandboxed. | risk accepted (local tool) |
+| B2 | Reads | The whole repo, `deploy/history.jsonl`, and **`observability/.env`** (to get the Grafana password for the evidence secret scan and the canary check). | needed; the Grafana check **could be removed** by scanning for a hash instead of the plaintext |
+| B3 | Network | localhost Prometheus (:9090), Loki (:3100), Tempo (:3200), app (:8010); the Claude CLI's API traffic. | needed |
+| B4 | Executes before approval | `collect-evidence.sh` (curl GETs, `docker compose ps`, read-only git), `claude -p` (responder), `docker image inspect`. No state changes. | needed |
+| B5 | **Executes after human approval** | Only `runbooks/rollback.sh <validated version>` or `runbooks/restart-app.sh`, which run **`docker compose up -d --no-build app` / `docker compose restart app`**. These talk to the **Docker daemon socket**, and whoever can use it is **effectively root on the Docker VM**: they can start a privileged container, mount the VM's filesystem, or read any container's environment (including the DB password). The policy limits *which* commands run and with which argument, but the process that runs them holds root-equivalent power. | risk accepted for a local single-user setup; **could be reduced** by running the orchestrator under a user without Docker access and exposing a narrow "deploy version X" service |
+| B6 | Writes | `incident-response/incidents/<ID>/`, `deploy/history.jsonl` (via rollback.sh), `deploy/incident-watch-state.json`, `deploy/quarantine/` (secret-scan failures). | needed |
+| B7 | Approval | `respond.py approve <ID>` by whoever has a shell; approver = `$USER`, no second factor. Every precondition is re-checked at approval time and the command must equal the decided one. | risk accepted (single operator) |
+| B8 | Limits | ≤1 executed action per incident; rollback cooldown 30 min; rollback only to the recorded `previous_version` with a local image, no build. During a non-deploy outage an L1 rollback still passes every precondition, so the human is the only gate there (Step 4 finding). | needed; see triage K-010 |
+
+## C. Snyk Agent Scan
+
+Not run. `snyk-agent-scan` (0.6.4; `mcp-scan` now redirects to it) requires a Snyk account and `SNYK_TOKEN` for every scan, sends discovered tool/skill descriptions to Snyk's analysis API, and starts the stdio MCP servers it finds. That breaks this step's no-account / no-upload rule, so the manual inventory above stands in for it. The note is kept locally under the gitignored `runs/<date>/local-only/`.
