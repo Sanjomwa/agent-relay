@@ -1,0 +1,39 @@
+{
+  "incident_id": "INC-20260927-172205-post-audit-verify",
+  "expected_version": "20260927-172131-daa54c1",
+  "started_at": "2026-09-27T17:22:05Z",
+  "finished_at": "2026-09-27T17:23:13Z",
+  "passed": true,
+  "checks": [
+    {
+      "name": "ready",
+      "passed": true,
+      "detail": "GET /ready -> 200",
+      "at": "2026-09-27T17:22:05Z"
+    },
+    {
+      "name": "version",
+      "passed": true,
+      "detail": "/version = 20260927-172131-daa54c1",
+      "at": "2026-09-27T17:22:05Z"
+    },
+    {
+      "name": "traffic_probe",
+      "passed": true,
+      "detail": "[final    62s] sent=121 claimed=121 completed=121 errors=0 stale=0",
+      "at": "2026-09-27T17:23:13Z"
+    },
+    {
+      "name": "error_ratio_zero",
+      "passed": true,
+      "detail": "5xx rate on claim/complete routes = 0",
+      "at": "2026-09-27T17:23:13Z"
+    },
+    {
+      "name": "alert_resolved",
+      "passed": true,
+      "detail": "RelayClaimCompleteErrorRatioHigh is not firing or pending",
+      "at": "2026-09-27T17:23:13Z"
+    }
+  ]
+}

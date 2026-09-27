@@ -100,3 +100,14 @@ running tests against another database.
 This starter intentionally does not include Docker, Kubernetes, CI, external
 brokers, an LLM, or a PostgreSQL implementation. Those are deployment and
 student-port concerns rather than part of the local relay protocol.
+
+## Homework 4: Operations and Security
+
+The full write-up is [docs/operations-and-security-report.md](docs/operations-and-security-report.md): architecture, the incident loop, the primary incident and the DB drill, alerting lessons, the security audit, corrections and limitations, and how to reproduce everything.
+
+- [`observability/`](observability/): OpenTelemetry Collector, Prometheus, Loki, Tempo and Grafana (a separate Compose project), the dashboard and the `RelayClaimCompleteErrorRatioHigh` alert.
+- [`scripts/release.sh`](scripts/release.sh) and [`scripts/traffic.py`](scripts/traffic.py): versioned releases recorded in `deploy/history.jsonl`, and a load generator.
+- [`incident-response/`](incident-response/): evidence collection, the read-only responder, the autonomy policy (`autonomy-policy.yaml`, `policy.py`), runbooks, and recorded incidents under `incidents/`.
+- [`security-audit/`](security-audit/): Semgrep and model-review results, human triage with dispositions, and the responder capability inventory.
+
+Setup: copy `.env.example` to `.env` and `observability/.env.example` to `observability/.env`, set both secrets, then run `scripts/release.sh` and `docker compose -f observability/compose.yaml up -d`.
