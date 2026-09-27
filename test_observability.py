@@ -39,6 +39,14 @@ IDEMPOTENCY_KEY = "idem-key-Bc29TgLs-3308"
 
 
 @pytest.fixture(autouse=True)
+def no_enrollment_secret(monkeypatch):
+    # A secret exported in the developer's shell would make every unauthenticated
+    # registration below return 401. Tests that exercise enrollment set it explicitly.
+    monkeypatch.delenv("RELAY_ENROLLMENT_SECRET", raising=False)
+    monkeypatch.delenv("ENROLLMENT_SECRET", raising=False)
+
+
+@pytest.fixture(autouse=True)
 def empty_database():
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)

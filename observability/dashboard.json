@@ -212,7 +212,7 @@
       "id": 3,
       "type": "stat",
       "title": "5xx ratio, claim + complete",
-      "description": "Share of claim and complete requests answered with 5xx (1m rate). The alert fires above 10% with enough traffic.",
+      "description": "Share of claim and complete requests answered with 5xx (1m rate). The alert fires above 10% with enough traffic. Shows \"no traffic\" when there were no claim/complete requests in the last minute.",
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -255,7 +255,20 @@
               }
             ]
           },
-          "mappings": []
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "text": "no traffic",
+                  "color": "text",
+                  "index": 0
+                }
+              }
+            }
+          ],
+          "noValue": "no traffic"
         },
         "overrides": []
       },
@@ -426,7 +439,8 @@
             "lineWidth": 1,
             "fillOpacity": 10,
             "showPoints": "never",
-            "spanNulls": true
+            "spanNulls": false,
+            "insertNulls": 300000
           }
         },
         "overrides": []
@@ -475,10 +489,11 @@
             "lineWidth": 1,
             "fillOpacity": 10,
             "showPoints": "never",
-            "spanNulls": true,
+            "spanNulls": false,
             "thresholdsStyle": {
               "mode": "line"
-            }
+            },
+            "insertNulls": 300000
           },
           "thresholds": {
             "mode": "absolute",
@@ -540,10 +555,11 @@
             "lineWidth": 1,
             "fillOpacity": 10,
             "showPoints": "never",
-            "spanNulls": true,
+            "spanNulls": false,
             "stacking": {
               "mode": "normal"
-            }
+            },
+            "insertNulls": 300000
           }
         },
         "overrides": []
@@ -592,10 +608,11 @@
             "lineWidth": 1,
             "fillOpacity": 10,
             "showPoints": "never",
-            "spanNulls": true,
+            "spanNulls": false,
             "stacking": {
               "mode": "normal"
-            }
+            },
+            "insertNulls": 300000
           }
         },
         "overrides": []
@@ -644,10 +661,11 @@
             "lineWidth": 1,
             "fillOpacity": 10,
             "showPoints": "never",
-            "spanNulls": true,
+            "spanNulls": false,
             "stacking": {
               "mode": "normal"
-            }
+            },
+            "insertNulls": 300000
           }
         },
         "overrides": []
@@ -696,7 +714,8 @@
             "lineWidth": 1,
             "fillOpacity": 10,
             "showPoints": "never",
-            "spanNulls": true
+            "spanNulls": false,
+            "insertNulls": 300000
           }
         },
         "overrides": []
@@ -754,7 +773,8 @@
             "lineWidth": 1,
             "fillOpacity": 10,
             "showPoints": "never",
-            "spanNulls": true
+            "spanNulls": false,
+            "insertNulls": 300000
           }
         },
         "overrides": []
@@ -803,7 +823,8 @@
             "lineWidth": 1,
             "fillOpacity": 10,
             "showPoints": "never",
-            "spanNulls": true
+            "spanNulls": false,
+            "insertNulls": 300000
           }
         },
         "overrides": []

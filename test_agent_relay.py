@@ -27,6 +27,14 @@ from storage import claim_one
 
 
 @pytest.fixture(autouse=True)
+def no_enrollment_secret(monkeypatch):
+    # A secret exported in the developer's shell would make every unauthenticated
+    # registration below return 401. Tests that exercise enrollment set it explicitly.
+    monkeypatch.delenv("RELAY_ENROLLMENT_SECRET", raising=False)
+    monkeypatch.delenv("ENROLLMENT_SECRET", raising=False)
+
+
+@pytest.fixture(autouse=True)
 def empty_database():
     # Resets whatever DB RELAY_DATABASE_URL points at. Defaults to the
     # scratch /tmp file above; never run against a DB with data you need.

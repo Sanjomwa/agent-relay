@@ -1,14 +1,26 @@
+# The Dockerfile COPYs an explicit file list, so none of this reaches the image;
+# ignoring it keeps the build context small and keeps secrets, evidence and
+# audit output from ever being sent to the Docker daemon.
 .venv
 .git
 .pytest_cache
+.ruff_cache
 __pycache__/
 *.db
 *.db-shm
 *.db-wal
 *-credentials.json
 reports.md
-deploy/
-scripts/
-observability/
 .env
 .env.*
+
+# Not needed by the image
+.github/
+deploy/
+docs/
+incident-response/
+k8s/
+observability/
+scripts/
+security-audit/
+test_*.py

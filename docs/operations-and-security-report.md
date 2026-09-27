@@ -1,5 +1,7 @@
 # Agent Relay: operations and security report (Homework 4)
 
+Built against the draft of Module 4's homework. The published homework (2026-09-26) uses a different starter app, Order Tracker; this repo is the extended version.
+
 Repository: Sanjomwa/agent-relay (fork, AI Dev Tools Zoomcamp, Module 4). Period covered: 2026-09-26 to 2026-09-27.
 Times are UTC, with local time (EAT, UTC+3) in brackets where it helps to read the Grafana screenshots.
 Figures come from files in this repository, except the impact counts in §3.5, which come from Loki, Prometheus and database queries run on 2026-09-27. Loki and Prometheus keep 2 days of data, so those counts cannot be re-queried after about 2026-09-29.

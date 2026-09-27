@@ -20,5 +20,17 @@ dependencies = [
 [dependency-groups]
 dev = [
     "httpx>=0.28.1",
+    "jsonschema>=4.26.0",
     "pytest>=9.1.1",
+    "pyyaml>=6.0.3",
+]
+
+[tool.pytest.ini_options]
+# Collect only the real suites. security-audit/runs/** can hold snapshots with
+# copies of the test files, and incident folders hold captured source; neither
+# may ever be collected by a plain `uv run pytest -q`.
+testpaths = ["test_agent_relay.py", "test_observability.py", "incident-response/tests"]
+norecursedirs = [
+    ".*", "__pycache__", "*.egg-info", "build", "dist", "node_modules",
+    "security-audit", "incident-response/incidents", "deploy", "docs", "k8s", "observability", "scripts",
 ]

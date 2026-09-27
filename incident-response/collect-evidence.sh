@@ -212,6 +212,9 @@ if [ "$scan_fail" -ne 0 ]; then
   QDIR="deploy/quarantine/$ID-$(date -u +%s)"
   mkdir -p deploy/quarantine
   mv "$OUT" "$QDIR"
+  # Don't leave an empty incidents/<ID>/ behind. rmdir only succeeds on an empty directory, so
+  # an incident folder that already holds a record (respond.py's alert.json, timeline) is kept.
+  rmdir "incident-response/incidents/$ID" 2>/dev/null || true
   echo "collect-evidence: SECRET SCAN FAILED; packet quarantined at $QDIR (gitignored); do not hand it to the responder" >&2
   exit 3
 fi
