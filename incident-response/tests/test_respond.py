@@ -47,6 +47,7 @@ def test_responder_command_is_read_only_and_locked_down():
     assert "--no-session-persistence" in cmd and flags["--model"] == "sonnet"
     assert float(flags["--max-budget-usd"]) <= 1.0
     assert json.loads(flags["--settings"]) == {"advisorModel": ""}
+    assert flags["--setting-sources"] == ""  # no user/project/local settings files (K-008)
     for forbidden in ("--dangerously-skip-permissions", "--allow-dangerously-skip-permissions", "--allowedTools", "--add-dir", "--bare"):
         assert forbidden not in cmd
     assert not {"Bash", "Write", "Edit", "WebFetch"} & set(flags["--tools"].split(","))

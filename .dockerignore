@@ -10,3 +10,5 @@ reports.md
 deploy/
 scripts/
 observability/
+.env
+.env.*

@@ -220,7 +220,11 @@ async def register(
     x_enrollment_secret: str | None = Header(default=None),
 ) -> dict[str, str]:
     enrollment_secret = os.getenv("RELAY_ENROLLMENT_SECRET") or os.getenv("ENROLLMENT_SECRET")
-    if enrollment_secret is not None and not hmac.compare_digest(x_enrollment_secret or "", enrollment_secret):
+    # Compare bytes: compare_digest raises TypeError on non-ASCII str input, which would
+    # turn a malformed header into a 500 instead of a 401.
+    if enrollment_secret is not None and not hmac.compare_digest(
+        (x_enrollment_secret or "").encode("utf-8"), enrollment_secret.encode("utf-8")
+    ):
         raise RelayError("invalid_enrollment", "A valid enrollment secret is required.", 401)
     return register_agent(body.name, body.description)
 

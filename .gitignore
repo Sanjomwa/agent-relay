@@ -13,3 +13,6 @@ observability/.env
 # security audit: tracked-file snapshots and raw third-party scan output stay local
 security-audit/runs/*/snapshot/
 security-audit/runs/*/local-only/
+
+# Root secrets for compose (see .env.example)
+.env

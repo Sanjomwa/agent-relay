@@ -14,6 +14,12 @@ ID="${1:-}"; EXPECTED="${2:-}"
 [[ "$ID" =~ ^INC-[0-9]{8}-[0-9]{6}-[a-z0-9-]{1,40}$ ]] || { echo "invalid incident id" >&2; exit 2; }
 [[ "$EXPECTED" =~ ^[0-9]{8}-[0-9]{6}-[0-9a-f]{7}(-dirty)?$ ]] || { echo "invalid expected version" >&2; exit 2; }
 PORT="${RELAY_HOST_PORT:-8010}"; APP="http://localhost:${PORT}"; PROM="http://localhost:9090"
+# The traffic probe registers agents, which needs the enrollment secret: take it from the
+# environment, else from the repo's untracked .env. Exported for traffic.py; never printed.
+if [ -z "${RELAY_ENROLLMENT_SECRET:-}" ] && [ -f .env ]; then
+  RELAY_ENROLLMENT_SECRET="$(sed -n 's/^[[:space:]]*RELAY_ENROLLMENT_SECRET[[:space:]]*=[[:space:]]*//p' .env | head -n 1 | tr -d "\"'")"
+fi
+export RELAY_ENROLLMENT_SECRET="${RELAY_ENROLLMENT_SECRET:-}"
 OUTDIR="incident-response/incidents/$ID"; mkdir -p "$OUTDIR"
 STARTED="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 CHECKS="$(mktemp)"; trap 'rm -f "$CHECKS"' EXIT

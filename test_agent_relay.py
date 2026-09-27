@@ -199,3 +199,16 @@ def test_dashboard_is_asset_and_invalid_input_is_documented_error():
         missing_name = client.post("/api/v1/agents", json={})
         assert missing_name.status_code == 400
         assert missing_name.json()["error"]["code"] == "invalid_input"
+
+
+def test_non_ascii_enrollment_secret_is_rejected_not_an_error(monkeypatch):
+    monkeypatch.setenv("RELAY_ENROLLMENT_SECRET", "correct-secret")
+    with TestClient(main.app) as client:
+        # Starlette decodes header bytes as latin-1, so 0xE9 arrives as a non-ASCII str.
+        response = client.post(
+            "/api/v1/agents", json={"name": "x"}, headers=[(b"X-Enrollment-Secret", b"caf\xe9")]
+        )
+        assert response.status_code == 401
+        assert response.json()["error"]["code"] == "invalid_enrollment"
+        ok = client.post("/api/v1/agents", json={"name": "x"}, headers={"X-Enrollment-Secret": "correct-secret"})
+        assert ok.status_code == 201

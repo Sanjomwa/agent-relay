@@ -23,7 +23,8 @@ ID="$1"
 ALERT_FILE="$2"
 [[ "$ID" =~ ^INC-[0-9]{8}-[0-9]{6}-[a-z0-9-]{1,40}$ ]] || { echo "invalid incident id: $ID" >&2; exit 2; }
 [ -f "$ALERT_FILE" ] || { echo "alert file not found" >&2; exit 2; }
-command -v jq >/dev/null && command -v curl >/dev/null || { echo "jq and curl are required" >&2; exit 2; }
+command -v jq >/dev/null && command -v curl >/dev/null && command -v python3 >/dev/null || { echo "jq, curl and python3 are required" >&2; exit 2; }
+REDACTOR="$ROOT/incident-response/redact_secrets.py"
 
 # ---- fixed endpoints (localhost only) ------------------------------------------------
 PROM="http://localhost:9090"
@@ -54,9 +55,12 @@ record() { # <file> <kind> <what>
     '{file:$file, kind:$kind, query:$what, timestamp:$ts, bytes:$bytes, sha256:$sha}' >> "$MANIFEST_TMP"
 }
 
-# Redact credentials embedded in database URLs found in tracked source (defense in depth;
-# the secret scan below is the verification).
-redact() { sed -E 's#(postgres(ql)?(\+[a-z0-9]+)?://)[^[:space:]/@:]+:[^[:space:]/@]+@#\1[REDACTED]@#g'; }
+# Redact secrets from copied source BEFORE it is written (the scan below is the backstop):
+# credentials in database URLs, and values of key-like settings (PASSWORD / SECRET / TOKEN /
+# API_KEY / PRIVATE_KEY, `KEY: value` and `KEY=value`, placeholders kept) via redact_secrets.py.
+redact_urls() { sed -E 's#(postgres(ql)?(\+[a-z0-9]+)?://)[^[:space:]/@:]+:[^[:space:]/@]+@#\1[REDACTED]@#g'; }
+redact() { redact_urls | python3 "$REDACTOR" filter "$1"; }          # <path-hint> selects code vs config rules
+redact_diff() { redact_urls | python3 "$REDACTOR" filter-diff; }
 
 get() { # <file> <description> <curl args...>
   local file="$1" what="$2"; shift 2
@@ -150,10 +154,10 @@ record changes-versions.json derived "running version, previous_version and git 
 
 sha_ok() { [[ "$1" =~ ^[0-9a-f]{7,40}$ ]] && git cat-file -e "$1^{commit}" 2>/dev/null; }
 if sha_ok "$CUR_SHA" && sha_ok "$PREV_SHA" && [ "$CUR_SHA" != "$PREV_SHA" ]; then
-  git diff --stat "$PREV_SHA..$CUR_SHA" 2>&1 | redact | head -n 60 > "$OUT/changes-diff-stat.txt" || true
+  git diff --stat "$PREV_SHA..$CUR_SHA" 2>&1 | redact_urls | head -n 60 > "$OUT/changes-diff-stat.txt" || true
   record changes-diff-stat.txt command "git diff --stat $PREV_SHA..$CUR_SHA (head -60)"
-  git diff "$PREV_SHA..$CUR_SHA" -- . ':(exclude)uv.lock' 2>&1 | redact | head -n 400 > "$OUT/changes-diff.patch" || true
-  record changes-diff.patch command "git diff $PREV_SHA..$CUR_SHA -- . ':(exclude)uv.lock' (head -400 lines)"
+  git diff "$PREV_SHA..$CUR_SHA" -- . ':(exclude)uv.lock' 2>&1 | redact_diff | head -n 400 > "$OUT/changes-diff.patch" || true
+  record changes-diff.patch command "git diff $PREV_SHA..$CUR_SHA -- . ':(exclude)uv.lock' (secret values redacted; head -400 lines)"
   mkdir -p "$OUT/changed-files"
   total=0; files=0
   # Python sources first, then other text sources; never lockfiles or tests; max 5 files / 1500 lines.
@@ -164,7 +168,7 @@ if sha_ok "$CUR_SHA" && sha_ok "$PREV_SHA" && [ "$CUR_SHA" != "$PREV_SHA" ]; the
     lines="$(git show "$CUR_SHA:$path" | wc -l)"
     [ $((total + lines)) -le 1500 ] || continue
     safe="$(echo "$path" | tr '/' '_')"
-    git show "$CUR_SHA:$path" | redact > "$OUT/changed-files/$safe"
+    git show "$CUR_SHA:$path" | redact "$path" > "$OUT/changed-files/$safe"
     record "changed-files/$safe" command "git show $CUR_SHA:$path (redacted; file contents at the running version)"
     total=$((total + lines)); files=$((files + 1))
   done
@@ -184,6 +188,17 @@ scan_regex "agent bearer token pattern (agt_...)" 'agt_[A-Za-z0-9_-]{16,}'
 scan_regex "claim token pattern (clm_...)" 'clm_[A-Za-z0-9_-]{16,}'
 scan_regex "bearer credential" '[Bb]earer[[:space:]]+[A-Za-z0-9_.~+/=-]{20,}'
 scan_regex "database URL with credentials" 'postgres(ql)?(\+[a-z0-9]+)?://[^[:space:]/@:]+:[^[:space:]/@]+@'
+# Backstop for key-like secret values that escaped redaction (same rules as redact_secrets.py).
+kv_hits="$(python3 "$REDACTOR" scan "$OUT" 2>/dev/null | head -n 5 | tr '\n' ' ' || true)"
+[ -z "$kv_hits" ] || report_hit "key-like secret value (PASSWORD/SECRET/TOKEN/API_KEY/PRIVATE_KEY)" "$kv_hits"
+# The actual enrollment secret from the untracked root .env, whatever shape it appears in.
+if [ -f .env ]; then
+  ENROLL="$(sed -n 's/^[[:space:]]*RELAY_ENROLLMENT_SECRET[[:space:]]*=[[:space:]]*//p' .env | head -n 1 | tr -d "\"'")"
+  if [ -n "$ENROLL" ]; then
+    hits="$(grep -r -l -F -e "$ENROLL" "$OUT" 2>/dev/null || true)"
+    [ -z "$hits" ] || report_hit "enrollment secret value" "$(echo "$hits" | tr '\n' ' ')"
+  fi
+fi
 if [ -f observability/.env ]; then
   GRAFANA_PW="$(grep -E '^GRAFANA_ADMIN_PASSWORD=' observability/.env | head -n 1 | cut -d= -f2-)"
   if [ -n "$GRAFANA_PW" ]; then
@@ -206,6 +221,6 @@ jq -s --arg id "$ID" --arg active "$ACTIVE_AT" --argjson log_start "$LOG_START" 
    --arg generated "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
   '{incident_id:$id, generated_at:$generated, alert_active_at:$active,
     windows:{logs_and_traces:{from:($log_start|todate), to:($end|todate)}, metrics:{from:($metric_start|todate), to:($end|todate)}},
-    read_only:true, secret_scan:"passed (agt_/clm_ tokens, bearer credentials, database URLs with credentials, Grafana admin password)",
+    read_only:true, secret_scan:"passed (agt_/clm_ tokens, bearer credentials, database URLs with credentials, key-like secret values, Grafana admin password, enrollment secret)",
     entries:.}' "$MANIFEST_TMP" > "$OUT/manifest.json"
 echo "collect-evidence: $(jq '.entries|length' "$OUT/manifest.json") entries written to $OUT (secret scan passed)"

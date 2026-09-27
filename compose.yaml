@@ -23,10 +23,13 @@ services:
         APP_VERSION: ${APP_VERSION:-dev}
         GIT_SHA: ${GIT_SHA:-unknown}
     ports:
-      - "8010:8000"
+      # Loopback only: the API is not reachable from other machines on the network.
+      - "127.0.0.1:8010:8000"
     environment:
       RELAY_DATABASE_URL: postgresql+psycopg://agent_relay:agent_relay@postgres:5432/agent_relay
       DEPLOYMENT_ENVIRONMENT: local
+      # Agent registration requires X-Enrollment-Secret. Set it in the untracked .env (see .env.example).
+      RELAY_ENROLLMENT_SECRET: ${RELAY_ENROLLMENT_SECRET:?set it in .env}
       # Telemetry goes to the observability stack's collector (observability/compose.yaml).
       # If that stack is down the app keeps serving; exports just fail quietly-ish.
       OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-http://otel-collector:4318}

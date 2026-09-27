@@ -17,6 +17,7 @@ import os
 import signal
 import time
 from dataclasses import dataclass, field
+from pathlib import Path
 
 import httpx
 
@@ -218,6 +219,24 @@ async def main_async(args: argparse.Namespace) -> None:
     )
 
 
+def enrollment_secret_default() -> str | None:
+    """RELAY_ENROLLMENT_SECRET from the environment, else from the repo's untracked .env.
+    The value is only ever sent as the X-Enrollment-Secret header; it is never printed."""
+
+    value = os.getenv("RELAY_ENROLLMENT_SECRET")
+    if value:
+        return value
+    env_file = Path(__file__).resolve().parent.parent / ".env"
+    try:
+        for line in env_file.read_text(encoding="utf-8").splitlines():
+            key, sep, val = line.strip().partition("=")
+            if sep and key.strip() == "RELAY_ENROLLMENT_SECRET":
+                return val.strip().strip("'\"") or None
+    except OSError:
+        pass
+    return None
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Agent Relay traffic generator")
     parser.add_argument("--base-url", default=os.getenv("RELAY_BASE_URL", "http://localhost:8010"))
@@ -229,7 +248,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--work-seconds", type=float, default=0.05, help="simulated work time per task")
     parser.add_argument("--drain-seconds", type=float, default=30.0, help="after the duration, keep claiming until the inbox is empty (max)")
     parser.add_argument("--summary-interval", type=float, default=10.0)
-    parser.add_argument("--enrollment-secret", default=os.getenv("RELAY_ENROLLMENT_SECRET"))
+    parser.add_argument("--enrollment-secret", default=enrollment_secret_default(),
+                        help="defaults to $RELAY_ENROLLMENT_SECRET, then RELAY_ENROLLMENT_SECRET in the repo's .env")
     args = parser.parse_args()
     if args.rate <= 0 or args.workers < 1 or args.senders < 1 or not 0 <= args.wait_seconds <= 30:
         parser.error("rate > 0, workers >= 1, senders >= 1, 0 <= wait-seconds <= 30")

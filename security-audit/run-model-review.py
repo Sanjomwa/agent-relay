@@ -8,7 +8,7 @@
 
 The snapshot (<run-dir>/snapshot/, gitignored) must already exist (git ls-files copy).
 Same lockdown as the incident responder: Read/Grep/Glob only, dontAsk, empty strict MCP
-config, no session persistence, advisor disabled, allowlisted environment, budget cap.
+config, no session persistence, no settings files (--setting-sources ""), advisor disabled, allowlisted environment, budget cap.
 Writes <run-dir>/model-review.json (validated findings), model-review-envelope.json (raw
 CLI output incl. cost/usage) and model-review-command.txt.
 """
@@ -51,7 +51,7 @@ def main() -> int:
     cmd = ["claude", "-p", "--output-format", "json", "--json-schema", json.dumps(output_schema),
            "--tools", "Read,Grep,Glob", "--permission-mode", "dontAsk",
            "--strict-mcp-config", "--mcp-config", '{"mcpServers":{}}', "--no-session-persistence",
-           "--disable-slash-commands", "--no-chrome", "--settings", '{"advisorModel":""}',
+           "--disable-slash-commands", "--no-chrome", "--setting-sources", "", "--settings", '{"advisorModel":""}',
            "--max-budget-usd", BUDGET, "--model", MODEL]
     prompt = ((HERE / "audit-brief.md").read_text()
               + "\n\nThe files are in your working directory (a snapshot of the repository's tracked files). "

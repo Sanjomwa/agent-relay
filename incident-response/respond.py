@@ -265,6 +265,9 @@ def responder_command(schema_text: str, *, stream: bool = False) -> list[str]:
         "--no-chrome",
         # The user-level `advisorModel` setting would add a server-side "advisor" tool that forwards the
         # conversation to another model. Not part of the read-only tool set: switch it off explicitly.
+        # Load NO user/project/local settings files, so nothing in ~/.claude or the repo
+        # (hooks, allow rules, advisorModel, ...) can reach the responder (audit K-008).
+        "--setting-sources", "",
         "--settings", '{"advisorModel":""}',
         "--max-budget-usd", MAX_BUDGET_USD,
         "--model", MODEL,
@@ -283,7 +286,7 @@ def write_command_record(path: Path, cmd: list[str], cwd: Path, env: dict[str, s
         f"claude --version: {version}\n"
         f"model: {MODEL}\n"
         f"budget: --max-budget-usd {MAX_BUDGET_USD}\n"
-        f"tools (read-only): {READ_ONLY_TOOLS} (+ the CLI-internal StructuredOutput that --json-schema adds); permission mode: dontAsk; MCP: --strict-mcp-config with an empty config; --no-session-persistence; --settings advisorModel=\"\" (disables the inherited advisor tool)\n"
+        f"tools (read-only): {READ_ONLY_TOOLS} (+ the CLI-internal StructuredOutput that --json-schema adds); permission mode: dontAsk; MCP: --strict-mcp-config with an empty config; --no-session-persistence; --setting-sources \"\" (no user/project/local settings files); --settings advisorModel=\"\" (belt and braces: disables the advisor tool)\n"
         f"--bare: NOT used. It requires ANTHROPIC_API_KEY/apiKeyHelper and never reads OAuth; this machine is logged in with claude.ai, "
         f"and a probe with --bare returned 'Not logged in'.\n"
         f"environment (allowlist; variable NAMES only, never values): {', '.join(sorted(env))}\n"
